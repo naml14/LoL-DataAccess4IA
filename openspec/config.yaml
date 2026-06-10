@@ -1,0 +1,28 @@
+# SDD Artifact Store — OpenSpec
+schema: spec-driven
+
+context: |
+  Tech stack: TypeScript + MCP SDK (proposed, not confirmed) + Bun runtime
+  Architecture: MCP Server — pure data layer over Riot Data Dragon API
+  Testing: Bun test runner (detected); Strict TDD enabled
+  Style: English artifacts, Spanish user-facing replies
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    tdd: true
+    test_command: "bun test"
+  verify:
+    test_command: "bun test"
+    build_command: "bun build"
+  archive:
+    - Warn before merging destructive deltas
