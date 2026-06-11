@@ -1,0 +1,9 @@
+[install]
+dev = true
+optional = true
+peer = true
+linker = "hoisted"
+
+[test]
+timeout = 5000
+coverage = false
