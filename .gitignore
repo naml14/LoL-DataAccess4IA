@@ -8,6 +8,7 @@ build/
 # Bun
 .bun/
 *.lockb
+bun.lock
 
 # Environment
 .env
