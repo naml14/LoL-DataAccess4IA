@@ -1,0 +1,348 @@
+{
+  "type": "item",
+  "version": "16.12.1",
+  "data": {
+    "1001": {
+      "id": 1001,
+      "name": "Boots of Speed",
+      "description": "Slightly increases movement speed.",
+      "colloq": ";boots",
+      "plaintext": "Slightly increases movement speed",
+      "into": ["3006", "3020", "3047", "3111", "3117"],
+      "image": {
+        "full": "1001.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 300,
+        "purchasable": true,
+        "total": 300,
+        "sell": 210
+      },
+      "tags": {},
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {}
+    },
+    "1036": {
+      "id": 1036,
+      "name": "Long Sword",
+      "description": "Slightly increases attack damage.",
+      "colloq": ";",
+      "plaintext": "Slightly increases attack damage",
+      "into": ["1037", "1038", "3071", "3072", "3134"],
+      "image": {
+        "full": "1036.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 48,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 350,
+        "purchasable": true,
+        "total": 350,
+        "sell": 245
+      },
+      "tags": {},
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatPhysicalDamage": 10
+      }
+    },
+    "1038": {
+      "id": 1038,
+      "name": "B.F. Sword",
+      "description": "Slightly increases attack damage.",
+      "colloq": ";bf",
+      "plaintext": "Slightly increases attack damage",
+      "into": ["3071", "3072", "3087", "3094"],
+      "image": {
+        "full": "1038.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 96,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 1300,
+        "purchasable": true,
+        "total": 1300,
+        "sell": 910
+      },
+      "tags": {},
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatPhysicalDamage": 40
+      }
+    },
+    "3006": {
+      "id": 3006,
+      "name": "Berserker's Greaves",
+      "description": "Slightly increases movement speed and attack damage.",
+      "colloq": ";",
+      "plaintext": "Slightly increases movement speed and attack damage",
+      "from": ["1001", "1036"],
+      "image": {
+        "full": "3006.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 144,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 500,
+        "purchasable": true,
+        "total": 1100,
+        "sell": 770
+      },
+      "tags": {
+        "Boots": true
+      },
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatMovementSpeed": 45,
+        "flatPhysicalDamage": 15
+      }
+    },
+    "3020": {
+      "id": 3020,
+      "name": "Sorcerer's Shoes",
+      "description": "Slightly increases movement speed and magic penetration.",
+      "colloq": ";",
+      "plaintext": "Slightly increases movement speed and magic penetration",
+      "from": ["1001"],
+      "image": {
+        "full": "3020.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 192,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 800,
+        "purchasable": true,
+        "total": 1100,
+        "sell": 770
+      },
+      "tags": {
+        "Boots": true
+      },
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatMovementSpeed": 45,
+        "flatMagicPenetration": 15
+      }
+    },
+    "3047": {
+      "id": 3047,
+      "name": "Plated Steelcaps",
+      "description": "Slightly increases movement speed and armor.",
+      "colloq": ";",
+      "plaintext": "Slightly increases movement speed and armor",
+      "from": ["1001"],
+      "image": {
+        "full": "3047.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 240,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 800,
+        "purchasable": true,
+        "total": 1100,
+        "sell": 770
+      },
+      "tags": {
+        "Boots": true
+      },
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatMovementSpeed": 45,
+        "flatArmor": 20
+      }
+    },
+    "3111": {
+      "id": 3111,
+      "name": "Mercury's Treads",
+      "description": "Slightly increases movement speed and crowd control resistance.",
+      "colloq": ";",
+      "plaintext": "Slightly increases movement speed and crowd control resistance",
+      "from": ["1001"],
+      "image": {
+        "full": "3111.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 288,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 800,
+        "purchasable": true,
+        "total": 1100,
+        "sell": 770
+      },
+      "tags": {
+        "Boots": true
+      },
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatMovementSpeed": 45,
+        "flatTenacity": 25
+      }
+    },
+    "3089": {
+      "id": 3089,
+      "name": "Rabadon's Deathcap",
+      "description": "Slightly increases ability power.",
+      "colloq": ";",
+      "plaintext": "Slightly increases ability power",
+      "from": ["1038"],
+      "image": {
+        "full": "3089.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 336,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 1100,
+        "purchasable": true,
+        "total": 2400,
+        "sell": 1680
+      },
+      "tags": {},
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatMagicDamage": 120
+      }
+    },
+    "3071": {
+      "id": 3071,
+      "name": "The Collector",
+      "description": "Slightly increases attack damage and critical rate.",
+      "colloq": ";",
+      "plaintext": "Slightly increases attack damage and critical rate",
+      "from": ["1038", "1036"],
+      "image": {
+        "full": "3071.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 384,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 525,
+        "purchasable": true,
+        "total": 3000,
+        "sell": 2100
+      },
+      "tags": {},
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatPhysicalDamage": 55,
+        "flatLethality": 18
+      }
+    },
+    "3031": {
+      "id": 3031,
+      "name": "Infinity Edge",
+      "description": "Slightly increases attack damage, critical rate, and critical damage.",
+      "colloq": ";ie",
+      "plaintext": "Slightly increases attack damage, critical rate, and critical damage",
+      "from": ["3087", "1037"],
+      "image": {
+        "full": "3031.png",
+        "sprite": "item0.png",
+        "group": "item",
+        "x": 432,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "gold": {
+        "base": 625,
+        "purchasable": true,
+        "total": 3400,
+        "sell": 2380
+      },
+      "tags": {},
+      "maps": {
+        "1": true,
+        "8": true,
+        "10": true,
+        "11": true
+      },
+      "stats": {
+        "flatPhysicalDamage": 70,
+        "flatCritChance": 20
+      }
+    }
+  }
+}

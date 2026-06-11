@@ -1,0 +1,168 @@
+[
+  {
+    "id": 8000,
+    "key": "Precision",
+    "name": "Precision",
+    "icon": "perk-images/Styles/7200_Precision.png",
+    "slots": [
+      {
+        "slotLabel": "Slot 1",
+        "runes": [
+          { "id": 8000, "key": "Precision", "name": "Precision", "icon": "perk-images/Styles/7200_Precision.png", "shortDesc": "<tag=masteriesTooltipAQ>", "longDesc": "<tags=masteriesTooltipAD>" }
+        ]
+      },
+      {
+        "slotLabel": "Slot 2",
+        "runes": [
+          { "id": 8001, "key": "PressTheAttack", "name": "Press the Attack", "icon": "perk-images/Styles/Precision/PressTheAttack/8001.png", "shortDesc": "Attack and then exploit the weakness.", "longDesc": "After taking damage from an enemy champion, your next attack deals bonus damage and slows them." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 3",
+        "runes": [
+          { "id": 8002, "key": "LethalTempo", "name": "Lethal Tempo", "icon": "perk-images/Styles/Precision/LethalTempo/8002.png", "shortDesc": "Gain attack speed when in combat.", "longDesc": "Gain stacking attack speed when in combat with enemy champions." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 4",
+        "runes": [
+          { "id": 8003, "key": "FleetFootwork", "name": "Fleet Footwork", "icon": "perk-images/Styles/Precision/FleetFootwork/8003.png", "shortDesc": "Move faster after attacks.", "longDesc": "After attacking, gain movement speed. After regaining health, gain additional movement speed." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 5",
+        "runes": [
+          { "id": 8004, "key": "Conqueror", "name": "Conqueror", "icon": "perk-images/Styles/Precision/Conqueror/8004.png", "shortDesc": "Gain bonus damage when in combat.", "longDesc": "Gain stacks of adaptive force when in combat with enemy champions. Maximum stacks and bonus damage scale with level." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8100,
+    "key": "Domination",
+    "name": "Domination",
+    "icon": "perk-images/Styles/7201_Domination.png",
+    "slots": [
+      {
+        "slotLabel": "Slot 1",
+        "runes": [
+          { "id": 8100, "key": "Domination", "name": "Domination", "icon": "perk-images/Styles/7201_Domination.png", "shortDesc": "<tag=masteriesTooltipAQ>", "longDesc": "<tags=masteriesTooltipAD>" }
+        ]
+      },
+      {
+        "slotLabel": "Slot 2",
+        "runes": [
+          { "id": 8112, "key": "Electrocute", "name": "Electrocute", "icon": "perk-images/Styles/Domination/Electrocute/Electrocute.png", "shortDesc": "Burst damage on champion hit.", "longDesc": "Hitting an enemy champion with 3 separate attacks within 2 seconds deals bonus damage." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 3",
+        "runes": [
+          { "id": 8124, "key": "Predator", "name": "Predator", "icon": "perk-images/Styles/Domination/Predator/Predator.png", "shortDesc": "Attack to enhance and escape.", "longDesc": "Your next attack against an enemy champion consumes the enhanced state and deals bonus damage." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 4",
+        "runes": [
+          { "id": 8128, "key": "DarkHarvest", "name": "Dark Harvest", "icon": "perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png", "shortDesc": "Harvest damage from low-health enemies.", "longDesc": "Collect souls from enemies damaged by your attacks. Damaging a low-health enemy deals bonus adaptive damage." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8200,
+    "key": "Sorcery",
+    "name": "Sorcery",
+    "icon": "perk-images/Styles/7202_Sorcery.png",
+    "slots": [
+      {
+        "slotLabel": "Slot 1",
+        "runes": [
+          { "id": 8200, "key": "Sorcery", "name": "Sorcery", "icon": "perk-images/Styles/7202_Sorcery.png", "shortDesc": "<tag=masteriesTooltipAQ>", "longDesc": "<tags=masteriesTooltipAD>" }
+        ]
+      },
+      {
+        "slotLabel": "Slot 2",
+        "runes": [
+          { "id": 8214, "key": "SummonAery", "name": "Summon Aery", "icon": "perk-images/Styles/Sorcery/SummonAery/SummonAery.png", "shortDesc": "Attack and damage enemies.", "longDesc": "Your attacks and abilities send a small arc towards the target that deals damage on hit." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 3",
+        "runes": [
+          { "id": 8229, "key": "ArcaneComet", "name": "Arcane Comet", "icon": "perk-images/Styles/Sorcery/ArcaneComet/ArcaneComet.png", "shortDesc": "Cooldown on ability damage.", "longDesc": "Damaging an enemy champion with an ability causes a small comet to fall at the target location." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 4",
+        "runes": [
+          { "id": 8230, "key": "PhaseRush", "name": "Phase Rush", "icon": "perk-images/Styles/Sorcery/PhaseRush/PhaseRush.png", "shortDesc": "Movement speed on champion hit.", "longDesc": "Hitting an enemy champion with 3 separate attacks or abilities grants a burst of movement speed." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8300,
+    "key": "Resolve",
+    "name": "Resolve",
+    "icon": "perk-images/Styles/7203_Resolve.png",
+    "slots": [
+      {
+        "slotLabel": "Slot 1",
+        "runes": [
+          { "id": 8300, "key": "Resolve", "name": "Resolve", "icon": "perk-images/Styles/7203_Resolve.png", "shortDesc": "<tag=masteriesTooltipAQ>", "longDesc": "<tags=masteriesTooltipAD>" }
+        ]
+      },
+      {
+        "slotLabel": "Slot 2",
+        "runes": [
+          { "id": 8316, "key": "GraspOfTheUndying", "name": "Grasp of the Undying", "icon": "perk-images/Styles/Resolve/GraspOfTheUndying/GraspOfTheUndying.png", "shortDesc": "Sustain in combat.", "longDesc": "Every 4 seconds in combat, your next attack gains bonus damage and heals you." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 3",
+        "runes": [
+          { "id": 8345, "key": "Aftershock", "name": "Aftershock", "icon": "perk-images/Styles/Resolve/Aftershock/Aftershock.png", "shortDesc": "Bonus resistance after crowd control.", "longDesc": "After crowd controlling an enemy champion, gain bonus resistances and later deal damage to nearby enemies." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 4",
+        "runes": [
+          { "id": 8352, "key": "Guardian", "name": "Guardian", "icon": "perk-images/Styles/Resolve/Guardian/Guardian.png", "shortDesc": "Shield allies in range.", "longDesc": "Guard allies within range and while near them. When they take damage, you shield them." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8400,
+    "key": "Inspiration",
+    "name": "Inspiration",
+    "icon": "perk-images/Styles/7204_Inspiration.png",
+    "slots": [
+      {
+        "slotLabel": "Slot 1",
+        "runes": [
+          { "id": 8400, "key": "Inspiration", "name": "Inspiration", "icon": "perk-images/Styles/7204_Inspiration.png", "shortDesc": "<tag=masteriesTooltipAQ>", "longDesc": "<tags=masteriesTooltipAD>" }
+        ]
+      },
+      {
+        "slotLabel": "Slot 2",
+        "runes": [
+          { "id": 8423, "key": "GlacialAugment", "name": "Glacial Augment", "icon": "perk-images/Styles/Inspiration/GlacialAugment/GlacialAugment.png", "shortDesc": "Slow enemies on attack.", "longDesc": "When you attack an enemy, an Augment fires at them and slows them." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 3",
+        "runes": [
+          { "id": 8430, "key": "UnsealedSpellbook", "name": "Unsealed Spellbook", "icon": "perk-images/Styles/Inspiration/UnsealedSpellbook/UnsealedSpellbook.png", "shortDesc": "Swap summoners in combat.", "longDesc": "Swap your Summoner Spells at the start of the game. Your first swap is always free." }
+        ]
+      },
+      {
+        "slotLabel": "Slot 4",
+        "runes": [
+          { "id": 8465, "key": "FirstStrike", "name": "First Strike", "icon": "perk-images/Styles/Inspiration/FirstStrike/FirstStrike.png", "shortDesc": "Bonus damage on early strikes.", "longDesc": "When you initiate combat with champions, you gain bonus damage and gold." }
+        ]
+      }
+    ]
+  }
+]
