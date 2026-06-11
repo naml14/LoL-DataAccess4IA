@@ -197,8 +197,12 @@ describe("mcp-server: tool registry", () => {
     // the MCP SDK's getObjectShape() can extract the `method` literal. The
     // previous bug used `{ method: "tools/call" }` (plain object) which the
     // SDK rejected at startup with "Schema is missing a method literal".
-    const schema = calls[0].schema as { shape?: { method?: { value?: string } } };
+    const schema = calls[0].schema as { shape?: { method?: { value?: string }; params?: unknown } };
     expect(schema.shape?.method?.value).toBe("tools/call");
+    // The schema must also accept `params` (the request body has it). Without
+    // this, the SDK validator rejects incoming tools/call requests with
+    // error -32602 "expected object, received undefined" at path "params".
+    expect(schema.shape?.params).toBeDefined();
   });
 
   // Regression test: the single handler must dispatch by tool name to the

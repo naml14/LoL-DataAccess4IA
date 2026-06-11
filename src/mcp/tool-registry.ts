@@ -21,10 +21,23 @@ import type { TieredCache } from "../cache/tiered";
 // like `{ method: "tools/call" }` is rejected with "Schema is missing a
 // method literal" because getObjectShape() returns undefined for non-Zod
 // inputs. We must pass a real Zod schema with `method` as a literal.
+//
+// The schema MUST also declare `params` (with `name` and optional
+// `arguments`). Without this, the SDK's Zod validator rejects incoming
+// requests with "expected object, received undefined" at path "params"
+// (error -32602). The actual argument shape validation happens inside the
+// per-tool handler against its own inputSchema.
 // ---------------------------------------------------------------------------
 
 const ToolsCallRequestSchema = z.object({
   method: z.literal("tools/call"),
+  params: z
+    .object({
+      name: z.string(),
+      arguments: z.record(z.unknown()).optional(),
+      _meta: z.record(z.unknown()).optional(),
+    })
+    .passthrough(),
 });
 
 // ---------------------------------------------------------------------------

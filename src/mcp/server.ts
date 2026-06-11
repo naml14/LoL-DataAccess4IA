@@ -10,9 +10,11 @@ import type { ToolContext } from "../tools/_ctx";
 // The MCP SDK inspects requestSchema.shape.method at runtime; a plain object
 // like `{ method: "tools/list" }` is rejected with "Schema is missing a
 // method literal" because getObjectShape() returns undefined for non-Zod
-// inputs. Use a real Zod schema with `method` as a literal.
+// inputs. Use a real Zod schema with `method` as a literal. `params` is
+// allowed (and ignored) so the schema is symmetric with ToolsCallRequestSchema.
 const ToolsListRequestSchema = z.object({
   method: z.literal("tools/list"),
+  params: z.unknown().optional(),
 });
 
 // ---------------------------------------------------------------------------
@@ -26,11 +28,11 @@ type LogLevel = "debug" | "info" | "warn" | "error";
 // corrupt the JSON-RPC stream and break the MCP client. Node's `console.log`
 // and `console.info` write to stdout by default; we explicitly route them
 // to stderr so logs do not interfere with the protocol.
-const log: Record<LogLevel, (msg: string, ...meta: unknown[]) => void> = {
-  debug: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] ${msg}\n`),
-  info: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] ${msg}\n`),
-  warn: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] WARN: ${msg}\n`),
-  error: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] ERROR: ${msg}\n`),
+const log: Record<LogLevel, (msg: string, ..._meta: unknown[]) => void> = {
+  debug: (msg, ..._meta) => process.stderr.write(`[lol-datadragon-mcp] ${msg}\n`),
+  info: (msg, ..._meta) => process.stderr.write(`[lol-datadragon-mcp] ${msg}\n`),
+  warn: (msg, ..._meta) => process.stderr.write(`[lol-datadragon-mcp] WARN: ${msg}\n`),
+  error: (msg, ..._meta) => process.stderr.write(`[lol-datadragon-mcp] ERROR: ${msg}\n`),
 };
 
 // ---------------------------------------------------------------------------
