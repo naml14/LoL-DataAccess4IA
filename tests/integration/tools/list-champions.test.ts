@@ -3,9 +3,7 @@ import { listChampionsTool } from "../../../src/tools/list-champions";
 import { createToolContext } from "../../../src/tools/_ctx";
 import { MemoryCache } from "../../../src/cache/memory";
 import { DDragonClient } from "../../../src/ddragon/client";
-
-// Boundary assertion: tool description must not contain recommendation language.
-const FORBIDDEN = /best|recommended|optimal|meta|should|strong|pick|tier/gi;
+import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 
 /** Minimal champion.json fixture structure for list_champions. */
 function makeChampionFile(champions: Array<{ id: string; key: string; name: string; title: string; tags: string[]; blurb: string }>) {
@@ -88,9 +86,9 @@ describe("list_champions", () => {
 
   describe("boundary", () => {
     test("description contains no recommendation language", () => {
-      const src = listChampionsTool.description;
-      const matches = src.match(FORBIDDEN);
-      expect(matches).toBeNull();
+      expect(() =>
+        assertNoForbiddenLanguage(listChampionsTool.description, "list_champions description")
+      ).not.toThrow();
     });
   });
 

@@ -3,9 +3,7 @@ import { listProfileIconsTool } from "../../../src/tools/list-profile-icons";
 import { createToolContext } from "../../../src/tools/_ctx";
 import { MemoryCache } from "../../../src/cache/memory";
 import { DDragonClient } from "../../../src/ddragon/client";
-
-// Boundary assertion: tool description must not contain recommendation language.
-const FORBIDDEN = /best|recommended|optimal|meta|should|strong|pick|tier/gi;
+import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 
 function makeProfileIconFile(icons: Array<{ id: number; imageFull: string }>) {
   const data: Record<string, unknown> = {};
@@ -67,9 +65,9 @@ describe("list_profile_icons", () => {
 
   describe("boundary", () => {
     test("description contains no recommendation language", () => {
-      const src = listProfileIconsTool.description;
-      const matches = src.match(FORBIDDEN);
-      expect(matches).toBeNull();
+      expect(() =>
+        assertNoForbiddenLanguage(listProfileIconsTool.description, "list_profile_icons description")
+      ).not.toThrow();
     });
   });
 

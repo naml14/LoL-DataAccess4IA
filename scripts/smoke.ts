@@ -141,11 +141,6 @@ async function main(): Promise<void> {
 
   const ctx = buildContext();
 
-  // Clear the champion list cache entry before each tool that uses it,
-  // to avoid cross-contamination from list_champions caching a different
-  // structure at the same key that get_champion expects.
-  const CHAMPION_LIST_CK = "ddragon:16.12.1:en_US:/cdn/16.12.1/data/en_US/champion.json";
-
   let passed = 0;
   let failed = 0;
 
@@ -168,8 +163,6 @@ async function main(): Promise<void> {
     {
       name: "get_champion (Aatrox)",
       fn: async () => {
-        // Clear the champion list cache so get_champion fetches fresh data.
-        await ctx.cache.delete(CHAMPION_LIST_CK);
         const result = await getChampionTool.handler({ idOrKey: "Aatrox" }, ctx) as any;
         if (!result.id || result.id !== "Aatrox") throw new Error("Champion not found");
       },

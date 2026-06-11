@@ -9,18 +9,11 @@ import { listSummonerSpellsTool } from "../../src/tools/list-summoner-spells";
 import { listProfileIconsTool } from "../../src/tools/list-profile-icons";
 import { createToolContext } from "../../src/tools/_ctx";
 import type { ToolContext } from "../../src/tools/_ctx";
+import { assertNoForbiddenLanguage } from "../../src/mcp/boundary-language";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
-/**
- * Forbidden language regex — covers reasoning/recommendation terms.
- * Matches: best, recommended, tier list, tier S, should you/build/pick,
- * meta pick, strong pick, optimal build, top build, pro build, build order.
- */
-const FORBIDDEN_PATTERN =
-  /best|recommended|tier\s*list|tier\s*[sS]|should\s+(?:you|build|pick)|meta\s+pick|strong\s+pick|optimal\s+build|top\s+build|pro\s+build|build\s+order/gi;
 
 const ALL_TOOLS = [
   getCurrentPatchTool,
@@ -127,21 +120,6 @@ function buildMockContext(fixtures: {
 }
 
 // ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function findForbiddenMatches(text: string): string[] {
-  const results: string[] = [];
-  let match: RegExpExecArray | null;
-  // Reset lastIndex before each search
-  FORBIDDEN_PATTERN.lastIndex = 0;
-  while ((match = FORBIDDEN_PATTERN.exec(text)) !== null) {
-    results.push(match[0]);
-  }
-  return results;
-}
-
-// ---------------------------------------------------------------------------
 // Boundary tests — response scan
 // ---------------------------------------------------------------------------
 
@@ -149,8 +127,7 @@ test("boundary: get_current_patch response contains no reasoning language", asyn
   const ctx = buildMockContext({ version: "14.10.1" });
   const result = await getCurrentPatchTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "get_current_patch response")).not.toThrow();
 });
 
 test("boundary: list_champions response contains no reasoning language", async () => {
@@ -168,8 +145,7 @@ test("boundary: list_champions response contains no reasoning language", async (
   const ctx = buildMockContext({ version: "14.10.1", champions: championsFile });
   const result = await listChampionsTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "list_champions response")).not.toThrow();
 });
 
 test("boundary: get_champion response contains no reasoning language", async () => {
@@ -187,8 +163,7 @@ test("boundary: get_champion response contains no reasoning language", async () 
   const ctx = buildMockContext({ version: "14.10.1", champions: championsFile });
   const result = await getChampionTool.handler({ idOrKey: "Ahri" }, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "get_champion response")).not.toThrow();
 });
 
 test("boundary: list_items response contains no reasoning language", async () => {
@@ -206,8 +181,7 @@ test("boundary: list_items response contains no reasoning language", async () =>
   const ctx = buildMockContext({ version: "14.10.1", items: itemsFile });
   const result = await listItemsTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "list_items response")).not.toThrow();
 });
 
 test("boundary: get_item response contains no reasoning language", async () => {
@@ -225,8 +199,7 @@ test("boundary: get_item response contains no reasoning language", async () => {
   const ctx = buildMockContext({ version: "14.10.1", items: itemsFile });
   const result = await getItemTool.handler({ id: 1001 }, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "get_item response")).not.toThrow();
 });
 
 test("boundary: list_runes response contains no reasoning language", async () => {
@@ -247,8 +220,7 @@ test("boundary: list_runes response contains no reasoning language", async () =>
   const ctx = buildMockContext({ version: "14.10.1", runes: runesFile });
   const result = await listRunesTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "list_runes response")).not.toThrow();
 });
 
 test("boundary: list_summoner_spells response contains no reasoning language", async () => {
@@ -266,8 +238,7 @@ test("boundary: list_summoner_spells response contains no reasoning language", a
   const ctx = buildMockContext({ version: "14.10.1", summonerSpells: spellsFile });
   const result = await listSummonerSpellsTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "list_summoner_spells response")).not.toThrow();
 });
 
 test("boundary: list_profile_icons response contains no reasoning language", async () => {
@@ -281,25 +252,25 @@ test("boundary: list_profile_icons response contains no reasoning language", asy
   const ctx = buildMockContext({ version: "14.10.1", profileIcons: iconsFile });
   const result = await listProfileIconsTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
-  const matches = findForbiddenMatches(serialized);
-  expect(matches).toEqual([]);
+  expect(() => assertNoForbiddenLanguage(serialized, "list_profile_icons response")).not.toThrow();
 });
 
 // ---------------------------------------------------------------------------
-// Boundary tests — description scan (read from source files)
+// Boundary tests — description scan
 // ---------------------------------------------------------------------------
 
-test("boundary: tool descriptions in source files contain no reasoning language", async () => {
+test("boundary: tool descriptions contain no reasoning language", () => {
   const failingTools: string[] = [];
 
   for (const tool of ALL_TOOLS) {
-    const sourcePath = TOOL_SOURCE_FILES[tool.name];
-    if (!sourcePath) continue;
-
-    const sourceContent = await Bun.file(sourcePath).text();
-    const matches = findForbiddenMatches(sourceContent);
-    if (matches.length > 0) {
-      failingTools.push(`${tool.name}: ${matches.join(", ")}`);
+    try {
+      assertNoForbiddenLanguage(tool.description, `${tool.name} description`);
+    } catch (err) {
+      if (err instanceof Error) {
+        failingTools.push(`${tool.name}: ${err.message}`);
+      } else {
+        failingTools.push(`${tool.name}: ${String(err)}`);
+      }
     }
   }
 
@@ -310,20 +281,30 @@ test("boundary: tool descriptions in source files contain no reasoning language"
 // Boundary test — synthetic fixture with forbidden content would fail
 // ---------------------------------------------------------------------------
 
-test("boundary: synthetic fixture containing forbidden keywords would fail the test", () => {
-  // This proves the regex correctly detects forbidden language.
+test("boundary: assertNoForbiddenLanguage catches design-required terms in synthetic fixture", () => {
+  // Prove the centralized helper catches all 5 design-required terms
+  // that the old weak regex missed: winrate, score, tier, best, S-tier.
   const syntheticResponse = JSON.stringify({
     isError: false,
     data: {
       champion: {
         id: "Ahri",
         name: "Ahri",
-        description: "This is the best champion for the meta pick",
+        description: "This is the best champion — S-tier pick with 60% winrate and a score of 9. The tier list puts her at the top.",
       },
     },
   });
-  const matches = findForbiddenMatches(syntheticResponse);
-  // "best" matches, "meta pick" matches
-  expect(matches).toContain("best");
-  expect(matches).toContain("meta pick");
+
+  // assertNoForbiddenLanguage throws on any forbidden term
+  expect(() => assertNoForbiddenLanguage(syntheticResponse, "synthetic fixture")).toThrow();
+});
+
+// ---------------------------------------------------------------------------
+// Boundary test — neutral text does NOT throw
+// ---------------------------------------------------------------------------
+
+test("boundary: assertNoForbiddenLanguage accepts neutral champion description", () => {
+  // "Sona's Q has a 10 second cooldown" — no forbidden language
+  const neutral = "Sona's Q has a 10 second cooldown.";
+  expect(() => assertNoForbiddenLanguage(neutral, "neutral description")).not.toThrow();
 });

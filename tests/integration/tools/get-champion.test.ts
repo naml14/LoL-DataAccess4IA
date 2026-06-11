@@ -3,9 +3,7 @@ import { getChampionTool } from "../../../src/tools/get-champion";
 import { createToolContext } from "../../../src/tools/_ctx";
 import { MemoryCache } from "../../../src/cache/memory";
 import { DDragonClient } from "../../../src/ddragon/client";
-
-// Boundary assertion: tool description must not contain recommendation language.
-const FORBIDDEN = /best|recommended|optimal|meta|should|strong|pick|tier/gi;
+import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 
 /** Build a champion record with given id and key. */
 function champ(id: string, key: string, name: string) {
@@ -94,9 +92,9 @@ describe("get_champion", () => {
 
   describe("boundary", () => {
     test("description contains no recommendation language", () => {
-      const src = getChampionTool.description;
-      const matches = src.match(FORBIDDEN);
-      expect(matches).toBeNull();
+      expect(() =>
+        assertNoForbiddenLanguage(getChampionTool.description, "get_champion description")
+      ).not.toThrow();
     });
   });
 

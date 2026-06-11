@@ -89,8 +89,9 @@ export async function startServer(): Promise<void> {
   });
 
   // Also register the tools/list handler so the server can report capabilities
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   server.setRequestHandler(
-    { method: "tools/list" } as any,
+    { method: "tools/list" } as unknown as any,
     async () => {
       return {
         tools: registry.listTools().map((tool) => ({

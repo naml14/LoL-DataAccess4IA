@@ -115,3 +115,11 @@ test("toMcpError: preserves data field from DDragonError when present", () => {
   expect(result.code).toBe("network");
   expect(result.data).toEqual({ cause: { foo: "bar" } });
 });
+
+test("toMcpError: future DDragonError kind throws rather than returning undefined", () => {
+  // Simulate a future error kind not yet in the DDragonError union.
+  const futureErr = { kind: "rate-limit" as const, message: "Rate limited" };
+  // Cast to bypass the TypeScript union exhaustiveness check (this is intentional —
+  // we are testing runtime behaviour for a kind that does not exist yet).
+  expect(() => toMcpError(futureErr as unknown as DDragonError)).toThrow(/Unknown DDragonError kind/);
+});
