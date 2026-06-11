@@ -1,11 +1,11 @@
 {
   "name": "@naml14/lol-datadragon-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for Riot Data Dragon — pure data layer, no reasoning",
   "type": "module",
   "license": "MIT",
   "bin": {
-    "lol-datadragon-mcp": "./dist/cli.js"
+    "lol-datadragon-mcp": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -50,6 +50,6 @@
   "author": "naml14",
   "repository": {
     "type": "git",
-    "url": "https://github.com/naml14/lol-datadragon-mcp.git"
+    "url": "git+https://github.com/naml14/lol-datadragon-mcp.git"
   }
 }
