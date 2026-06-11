@@ -88,7 +88,14 @@ export const getChampionTool = {
       (c: ChampionRecord) => c.key === input.idOrKey
     );
 
-    // Cross-ambiguity: id lookup and key lookup resolve to different champions.
+    // Ambiguity: any of these is ambiguous.
+    // - byId.length > 1: multiple champions share this id (case-insensitive)
+    // - byKey.length > 1: multiple champions share this key
+    // - byId.length === 1 && byKey.length === 1 && byId[0] !== byKey[0]:
+    //   cross-ambiguity — id and key resolve to different champions
+    if (byId.length > 1 || byKey.length > 1) {
+      throw new ChampionAmbiguousError(input.idOrKey);
+    }
     if (byId.length === 1 && byKey.length === 1 && byId[0] !== byKey[0]) {
       throw new ChampionAmbiguousError(input.idOrKey);
     }

@@ -121,25 +121,26 @@ describe("get_champion", () => {
     });
 
     test("throws not-found error when champion does not exist", async () => {
+      let thrown: unknown = null;
       try {
         await getChampionTool.handler({ idOrKey: "NonExistent" }, ctx);
-        expect.fail("Expected error to be thrown");
-      } catch (err: any) {
-        expect(err.code).toBe("not-found");
+      } catch (err) {
+        thrown = err;
       }
+      expect(thrown).not.toBeNull();
+      expect((thrown as any).code).toBe("not-found");
     });
 
     test("throws ambiguous error when id and key lookup resolve to different champions", async () => {
-      // Replace fixture with the ambiguous one.
       setupFetch(AMBIGUOUS_FIXTURE);
-
+      let thrown: unknown = null;
       try {
-        // Query "A" matches id="A" and key="1" (Annie) → ambiguous
         await getChampionTool.handler({ idOrKey: "A" }, ctx);
-        expect.fail("Expected ambiguous error");
-      } catch (err: any) {
-        expect(err.message).toContain("ambiguous");
+      } catch (err) {
+        thrown = err;
       }
+      expect(thrown).not.toBeNull();
+      expect((thrown as any).message.toLowerCase()).toContain("ambiguous");
     });
 
     test("uses explicit version override", async () => {
