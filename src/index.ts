@@ -1,16 +1,9 @@
-// Entry point — Phase 1 slice only (no MCP server yet, see Phase 6)
-// TODO(slice-6): real implementation in Phase 6 — wire MCP server here
-import { loadConfig } from "./config";
+// Entry point — wires the MCP server into the process.
+// Smoke test: loadConfig() is called inside startServer(), so this will throw
+// at module load time if config is invalid (e.g. LOL_DD_HTTP_TIMEOUT_MS < 100).
+import { startServer } from "./mcp/server.js";
 
-const config = loadConfig();
-
-// Simple logger that respects logLevel — no external logger dependency yet.
-// TODO(slice-6): replace with a proper logger (e.g. pino) wired through the MCP server lifecycle
-const log: Record<string, () => void> = {
-  debug: () => console.debug("[lol-datadragon-mcp]", config),
-  info: () => console.info("[lol-datadragon-mcp]", config),
-  warn: () => console.warn("[lol-datadragon-mcp]", config),
-  error: () => console.error("[lol-datadragon-mcp]", config),
-};
-
-log[config.logLevel]();
+startServer().catch((err) => {
+  console.error("[lol-datadragon-mcp] Fatal error during startup:", err);
+  process.exit(1);
+});

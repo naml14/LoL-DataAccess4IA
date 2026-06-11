@@ -17,6 +17,7 @@ function makeSummonerFile(spells: Array<{
       id: spell.id,
       name: spell.name,
       description: spell.description,
+      key: spell.key,
       tooltip: spell.tooltip,
       maxrank: spell.maxrank,
       cooldown: spell.cooldown,
