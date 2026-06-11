@@ -1,11 +1,9 @@
-import { Server } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { Server } from "@modelcontextprotocol/sdk/server";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { loadConfig } from "../config";
 import { DDragonClient } from "../ddragon/client";
 import { TieredCache } from "../cache/tiered";
 import { ToolRegistry } from "./tool-registry";
-import { toMcpError } from "./errors";
-import { createToolContext } from "../tools/_ctx";
 import type { ToolContext } from "../tools/_ctx";
 
 // ---------------------------------------------------------------------------
@@ -92,7 +90,7 @@ export async function startServer(): Promise<void> {
 
   // Also register the tools/list handler so the server can report capabilities
   server.setRequestHandler(
-    { method: "tools/list" },
+    { method: "tools/list" } as any,
     async () => {
       return {
         tools: registry.listTools().map((tool) => ({

@@ -88,7 +88,7 @@ export class DDragonClient {
   // Public API — each method wraps fetchJson with the appropriate URL
   // -------------------------------------------------------------------------
 
-  async getVersions(): Promise<string[]> {
+  async getVersions(): Promise<unknown> {
     return this.fetchJson(getVersionsPath());
   }
 

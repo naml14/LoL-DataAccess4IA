@@ -37,10 +37,12 @@ function makeChampionFile(champions: ReturnType<typeof champ>[]) {
   return { type: "champion" as const, format: "standar", version: "14.10.1", data };
 }
 
-/** Champions that produce ambiguity: id="A" (case-insensitive) and key="1". */
+/** Champions that produce ambiguity: id="A" (case-insensitive) and key="A".
+ * Query "A" resolves to champ "A" by id and champ "Annie" by key — different
+ * champions, same query string → ambiguous. */
 const AMBIGUOUS_FIXTURE = makeChampionFile([
-  champ("A", "1", "AmbiguousById"),   // id lookup for "A" → matches here
-  champ("Annie", "1", "Annie"),        // key lookup for "1" → matches here (ambiguous!)
+  champ("A", "A", "AmbiguousById"),   // id lookup for "A" → matches here
+  champ("Annie", "A", "Annie"),        // key lookup for "A" → matches here (ambiguous!)
 ]);
 
 /** Normal fixture for happy-path tests. */

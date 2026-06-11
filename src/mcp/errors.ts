@@ -21,7 +21,6 @@ const CODE_HTTP = "http";
 const CODE_CIRCUIT_OPEN = "circuit-open";
 const CODE_PARSE = "parse";
 const CODE_NOT_FOUND = "not-found";
-const CODE_AMBIGUOUS = "ambiguous";
 const CODE_VALIDATION = "validation";
 const CODE_INTERNAL = "internal";
 

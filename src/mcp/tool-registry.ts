@@ -1,4 +1,4 @@
-import type { Server } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { Server } from "@modelcontextprotocol/sdk/server";
 import { getCurrentPatchTool } from "../tools/get-current-patch";
 import { listChampionsTool } from "../tools/list-champions";
 import { getChampionTool } from "../tools/get-champion";
@@ -88,8 +88,8 @@ export class ToolRegistry {
   ): void {
     for (const tool of this.tools.values()) {
       server.setRequestHandler(
-        { method: "tools/call" },
-        async (request: { params: { name: string; arguments?: Record<string, unknown> } }) => {
+        { method: "tools/call" } as any,
+        async (request: any): Promise<any> => {
           // Only handle requests for this tool
           if (request.params.name !== tool.name) {
             return undefined;
