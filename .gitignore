@@ -15,6 +15,9 @@ bun.lock
 .env.local
 .env.*.local
 
+# npm auth (do NOT commit tokens)
+.npmrc
+
 # IDE
 .idea/
 .vscode/
