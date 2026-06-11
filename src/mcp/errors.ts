@@ -82,19 +82,14 @@ export function toMcpError(err: unknown): McpErrorResponse {
 function isDDragonError(err: unknown): err is DDragonError {
   if (!isPlainObject(err)) return false;
   const e = err as Record<string, unknown>;
+  // Accept any object with a string `kind` and string `message`.  The switch
+  // in mapDDragonError is the exhaustiveness guard; unknown kinds hit the
+  // default case and throw rather than returning undefined silently.
   return (
     e.kind !== undefined &&
     typeof e.kind === "string" &&
     e.message !== undefined &&
-    typeof e.message === "string" &&
-    [
-      "network",
-      "timeout",
-      "http",
-      "circuit-open",
-      "parse",
-      "not-found",
-    ].includes(e.kind)
+    typeof e.message === "string"
   );
 }
 
@@ -140,5 +135,13 @@ function mapDDragonError(err: DDragonError): McpErrorResponse {
       };
     case "not-found":
       return { isError: true, code: CODE_NOT_FOUND, message: err.message };
+    default: {
+      // If TypeScript narrows correctly this line is unreachable. If a new
+      // DDragonError.kind is added and this switch is not updated, the
+      // exhaustive-check will fail at compile time — but the default guards
+      // against silent undefined returns at runtime.
+      const _exhaustive: never = err;
+      throw new Error(`Unknown DDragonError kind: ${(_exhaustive as unknown as { kind: string }).kind}`);
+    }
   }
 }

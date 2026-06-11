@@ -1,16 +1,27 @@
 {
-  "name": "lol-datadragon-mcp",
-  "version": "0.1.0",
+  "name": "@naml14/lol-datadragon-mcp",
+  "version": "0.1.1",
   "description": "MCP server for Riot Data Dragon — pure data layer, no reasoning",
   "type": "module",
+  "license": "MIT",
+  "bin": {
+    "lol-datadragon-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "bun build src/cli.ts --target=bun --outdir=dist --external @modelcontextprotocol/sdk --external zod",
+    "prepublishOnly": "bun run build",
     "test": "bun test",
     "test:ci": "bun test --bail",
+    "typecheck": "tsc --noEmit",
+    "typecheck:tests": "tsc --noEmit -p tsconfig.test.json",
     "fixtures:refresh": "bun run scripts/fixtures-refresh.ts",
     "smoke": "bun run scripts/smoke.ts",
     "smoke:live": "LOL_DD_SMOKE_LIVE=1 bun run scripts/smoke.ts",
-    "typecheck": "tsc --noEmit",
-    "typecheck:tests": "tsc --noEmit -p tsconfig.test.json",
     "clean": "bun run scripts/clean.ts"
   },
   "dependencies": {
@@ -20,5 +31,25 @@
   "devDependencies": {
     "@types/bun": "^1.1.0",
     "typescript": "^5.7.2"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "riot",
+    "league-of-legends",
+    "data-dragon",
+    "llm"
+  ],
+  "author": "naml14",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naml14/lol-datadragon-mcp.git"
   }
 }

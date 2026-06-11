@@ -1,10 +1,19 @@
 import { Server } from "@modelcontextprotocol/sdk/server";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
 import { loadConfig } from "../config";
 import { DDragonClient } from "../ddragon/client";
 import { TieredCache } from "../cache/tiered";
 import { ToolRegistry } from "./tool-registry";
 import type { ToolContext } from "../tools/_ctx";
+
+// The MCP SDK inspects requestSchema.shape.method at runtime; a plain object
+// like `{ method: "tools/list" }` is rejected with "Schema is missing a
+// method literal" because getObjectShape() returns undefined for non-Zod
+// inputs. Use a real Zod schema with `method` as a literal.
+const ToolsListRequestSchema = z.object({
+  method: z.literal("tools/list"),
+});
 
 // ---------------------------------------------------------------------------
 // Logger
@@ -12,11 +21,16 @@ import type { ToolContext } from "../tools/_ctx";
 
 type LogLevel = "debug" | "info" | "warn" | "error";
 
+// CRITICAL: All log output MUST go to stderr. The MCP stdio transport uses
+// stdout exclusively for JSON-RPC frames. Mixing log lines into stdout would
+// corrupt the JSON-RPC stream and break the MCP client. Node's `console.log`
+// and `console.info` write to stdout by default; we explicitly route them
+// to stderr so logs do not interfere with the protocol.
 const log: Record<LogLevel, (msg: string, ...meta: unknown[]) => void> = {
-  debug: (msg, ...meta) => console.debug("[lol-datadragon-mcp]", msg, ...meta),
-  info: (msg, ...meta) => console.info("[lol-datadragon-mcp]", msg, ...meta),
-  warn: (msg, ...meta) => console.warn("[lol-datadragon-mcp]", msg, ...meta),
-  error: (msg, ...meta) => console.error("[lol-datadragon-mcp]", msg, ...meta),
+  debug: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] ${msg}\n`),
+  info: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] ${msg}\n`),
+  warn: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] WARN: ${msg}\n`),
+  error: (msg, ...meta) => process.stderr.write(`[lol-datadragon-mcp] ERROR: ${msg}\n`),
 };
 
 // ---------------------------------------------------------------------------
@@ -91,7 +105,7 @@ export async function startServer(): Promise<void> {
   // Also register the tools/list handler so the server can report capabilities
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   server.setRequestHandler(
-    { method: "tools/list" } as unknown as any,
+    ToolsListRequestSchema as unknown as any,
     async () => {
       return {
         tools: registry.listTools().map((tool) => ({

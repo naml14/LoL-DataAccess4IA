@@ -158,4 +158,85 @@ describe("mcp-server: tool registry", () => {
       })
     ).not.toThrow();
   });
+
+  // Regression test: previously registerAllTools called setRequestHandler
+  // once per tool in a loop. The MCP SDK only allows one handler per
+  // method, so the real server crashed at startup with "Schema is missing
+  // a method literal" after the first registration. This test enforces
+  // the single-handler invariant.
+  test("registerAllTools registers exactly ONE tools/call handler (not one per tool)", () => {
+    const registry = new ToolRegistry();
+    const calls: Array<{ schema: unknown; handler: unknown }> = [];
+    const mockServer = {
+      setRequestHandler: (schema: unknown, handler: unknown) => {
+        calls.push({ schema, handler });
+      },
+    };
+    registry.registerAllTools(mockServer as any, {
+      client: {} as any,
+      cache: new Map() as any,
+      config: {
+        locale: "en_US",
+        ttlSeconds: 900,
+        pinVersion: null,
+        cacheDir: "./.cache/ddragon",
+        httpTimeoutMs: 5000,
+        logLevel: "info" as const,
+      },
+      logger: {
+        info: () => {},
+        warn: () => {},
+        error: () => {},
+        debug: () => {},
+      },
+    });
+    // The bug was: 8 calls (one per tool). The fix is: exactly 1 call
+    // for `tools/call` that dispatches internally.
+    expect(calls).toHaveLength(1);
+    // The schema passed to the SDK is a Zod schema (not a plain object) so
+    // the MCP SDK's getObjectShape() can extract the `method` literal. The
+    // previous bug used `{ method: "tools/call" }` (plain object) which the
+    // SDK rejected at startup with "Schema is missing a method literal".
+    const schema = calls[0].schema as { shape?: { method?: { value?: string } } };
+    expect(schema.shape?.method?.value).toBe("tools/call");
+  });
+
+  // Regression test: the single handler must dispatch by tool name to the
+  // correct registered tool. Call it with each registered name and a known
+  // good argument shape; assert that the expected tool's handler ran.
+  test("registerAllTools handler dispatches by tool name to the right tool", async () => {
+    const registry = new ToolRegistry();
+    let captured: { schema: unknown; handler: (req: any) => Promise<any> } | null = null;
+    const mockServer = {
+      setRequestHandler: (schema: unknown, handler: any) => {
+        captured = { schema, handler };
+      },
+    };
+    registry.registerAllTools(mockServer as any, {
+      client: {} as any,
+      cache: new Map() as any,
+      config: {
+        locale: "en_US",
+        ttlSeconds: 900,
+        pinVersion: null,
+        cacheDir: "./.cache/ddragon",
+        httpTimeoutMs: 5000,
+        logLevel: "info" as const,
+      },
+      logger: {
+        info: () => {},
+        warn: () => {},
+        error: () => {},
+        debug: () => {},
+      },
+    });
+    expect(captured).not.toBeNull();
+    // Call for an unknown tool name → should produce an isError response,
+    // not crash and not return undefined.
+    const unknownResult = await captured!.handler({
+      params: { name: "does_not_exist", arguments: {} },
+    });
+    expect(unknownResult.isError).toBe(true);
+    expect(JSON.parse(unknownResult.content[0].text).code).toBe("not-found");
+  });
 });

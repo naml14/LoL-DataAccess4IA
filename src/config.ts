@@ -15,7 +15,7 @@ const ConfigSchema = z.object({
     .max(86400, `LOL_DD_TTL_SECONDS must be between 60 and 86400, got`)
     .default(900),
   pinVersion: z.string().nullable().default(null),
-  cacheDir: z.string().default("./.cache/ddragon"),
+  cacheDir: z.string().default(() => defaultCacheDir()),
   httpTimeoutMs: z
     .number()
     .int()
@@ -26,6 +26,24 @@ const ConfigSchema = z.object({
 });
 
 type Config = z.infer<typeof ConfigSchema>;
+
+/**
+ * Default cache directory:
+ * - If $LOL_DD_CACHE_DIR is set, that wins (handled in loadConfig).
+ * - Otherwise: $XDG_CACHE_HOME/lol-datadragon-mcp if XDG_CACHE_HOME is set.
+ * - Otherwise: $HOME/.cache/lol-datadragon-mcp (Linux/macOS)
+ *   or $USERPROFILE/.cache/lol-datadragon-mcp (Windows).
+ * - Last resort: relative "./.cache/lol-datadragon-mcp" (dev mode fallback).
+ *
+ * This is exported so the unit test can assert the same value.
+ */
+export function defaultCacheDir(): string {
+  const xdg = process.env.XDG_CACHE_HOME;
+  if (xdg && xdg !== "") return `${xdg}/lol-datadragon-mcp`;
+  const home = process.env.HOME ?? process.env.USERPROFILE;
+  if (home && home !== "") return `${home}/.cache/lol-datadragon-mcp`;
+  return "./.cache/lol-datadragon-mcp";
+}
 
 // ---------------------------------------------------------------------------
 // Parser
