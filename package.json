@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "test": "bun test",
+    "test:ci": "bun test --bail",
+    "fixtures:refresh": "bun run scripts/fixtures-refresh.ts",
+    "smoke": "bun run scripts/smoke.ts",
+    "smoke:live": "LOL_DD_SMOKE_LIVE=1 bun run scripts/smoke.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
