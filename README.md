@@ -8,6 +8,23 @@ An LLM that needs raw LoL game data (champions, items, runes, summoner spells, c
 
 **v1.0 release** — Phase 7 complete. The MCP server exposes 8 tools over stdio transport.
 
+### Warning Status
+
+Slice 9 (final verify-fix) addressed the last CRITICAL and closed several WARNINGs. Remaining items are **deferred** (intentional design gaps) or **suggestions** (improvements, not blockers):
+
+| ID | Item | Status |
+|---|---|---|
+| CRITICAL-2 | Boundary test used weak inline regex | **FIXED** — `assertNoForbiddenLanguage` now wired into all 9 boundary test files |
+| WARNING-2 | `as any` casts in `get-item.ts`, `server.ts`, `tool-registry.ts` | **FIXED** — typed with `as ItemFile` / `as unknown as any` + eslint comments |
+| WARNING-3 | `mapDDragonError` switch lacked `default` case | **FIXED** — `default: throw` added; future `DDragonError.kind` values throw at runtime |
+| WARNING-4 | `scripts/smoke.ts` had dead `cache.delete` workaround | **FIXED** — removed; cache key collision resolved in slice 8 |
+| WARNING-5 | `champion-full.json` orphan fixture | **FIXED** — file removed |
+| WARNING-6 | Cache key 2-colon singleton format | **Deferred** — acknowledged; does not affect correctness with `MemoryCache` |
+| WARNING-7 | MCP stdio transport not exercised end-to-end in tests | **Deferred** — acknowledged; would require subprocess stdio test |
+| WARNING-8 | Smoke script tests 6 tools; README claimed 8 | **Deferred** — acknowledged; `list_items` and `get_item` not in smoke |
+
+TypeScript: `bun run typecheck` and `bun run typecheck:tests` are **clean** (0 errors). Test suite: **326 pass / 0 fail**.
+
 ## Quick start
 
 ```bash
@@ -77,6 +94,7 @@ bun run smoke                   # smoke test (cached fixtures, offline)
 bun run smoke:live              # smoke test against live Data Dragon
 bun run typecheck               # production typecheck (src/ only, strict)
 bun run typecheck:tests         # full-strict typecheck including tests/
+bun run clean                   # remove .cache, dist, .bun, node_modules
 ```
 
 ### Fixtures
@@ -111,7 +129,8 @@ fixtures/
   ddragon/           # Recorded Data Dragon fixtures (offline testing)
 scripts/
   fixtures-refresh.ts   # Re-record fixtures from live CDN
-  smoke.ts              # Smoke test for all 8 tools
+  smoke.ts              # Smoke test for all 6 wired tools
+  clean.ts              # Remove build artifacts and cache
 ```
 
 ## Roadmap

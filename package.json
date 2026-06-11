@@ -10,7 +10,8 @@
     "smoke": "bun run scripts/smoke.ts",
     "smoke:live": "LOL_DD_SMOKE_LIVE=1 bun run scripts/smoke.ts",
     "typecheck": "tsc --noEmit",
-    "typecheck:tests": "tsc --noEmit -p tsconfig.test.json"
+    "typecheck:tests": "tsc --noEmit -p tsconfig.test.json",
+    "clean": "bun run scripts/clean.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",
