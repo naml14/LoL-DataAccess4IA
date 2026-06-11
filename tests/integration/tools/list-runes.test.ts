@@ -3,9 +3,7 @@ import { listRunesTool } from "../../../src/tools/list-runes";
 import { createToolContext } from "../../../src/tools/_ctx";
 import { MemoryCache } from "../../../src/cache/memory";
 import { DDragonClient } from "../../../src/ddragon/client";
-
-// Boundary assertion: tool description must not contain recommendation language.
-const FORBIDDEN = /best|recommended|optimal|meta|should|strong|pick|tier/gi;
+import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 
 /** Build a synthetic runesReforged.json array (direct array, not wrapped object). */
 function makeRunesFile(trees: Array<{
@@ -83,9 +81,9 @@ describe("list_runes", () => {
 
   describe("boundary", () => {
     test("description contains no recommendation language", () => {
-      const src = listRunesTool.description;
-      const matches = src.match(FORBIDDEN);
-      expect(matches).toBeNull();
+      expect(() =>
+        assertNoForbiddenLanguage(listRunesTool.description, "list_runes description")
+      ).not.toThrow();
     });
   });
 

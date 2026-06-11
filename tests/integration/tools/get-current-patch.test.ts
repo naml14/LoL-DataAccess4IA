@@ -3,9 +3,7 @@ import { getCurrentPatchTool } from "../../../src/tools/get-current-patch";
 import { createToolContext } from "../../../src/tools/_ctx";
 import { MemoryCache } from "../../../src/cache/memory";
 import { cacheKeyForResource } from "../../../src/cache/key";
-
-// Boundary assertion: tool description must not contain recommendation language.
-const FORBIDDEN = /best|recommended|optimal|meta|should|strong|pick|tier/gi;
+import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 const TOOL_NAME = "get_current_patch";
 
 describe("get_current_patch", () => {
@@ -30,9 +28,9 @@ describe("get_current_patch", () => {
 
   describe("boundary", () => {
     test("description contains no recommendation language", () => {
-      const src = getCurrentPatchTool.description;
-      const matches = src.match(FORBIDDEN);
-      expect(matches).toBeNull();
+      expect(() =>
+        assertNoForbiddenLanguage(getCurrentPatchTool.description, "get_current_patch description")
+      ).not.toThrow();
     });
   });
 

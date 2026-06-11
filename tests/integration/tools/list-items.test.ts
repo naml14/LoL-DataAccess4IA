@@ -3,9 +3,7 @@ import { listItemsTool } from "../../../src/tools/list-items";
 import { createToolContext } from "../../../src/tools/_ctx";
 import { MemoryCache } from "../../../src/cache/memory";
 import { DDragonClient } from "../../../src/ddragon/client";
-
-// Boundary assertion: tool description must not contain recommendation language.
-const FORBIDDEN = /best|recommended|optimal|meta|should|strong|pick|tier/gi;
+import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 
 function makeItemFile(items: Array<{
   id: number; name: string; plaintext: string;
@@ -78,9 +76,9 @@ describe("list_items", () => {
 
   describe("boundary", () => {
     test("description contains no recommendation language", () => {
-      const src = listItemsTool.description;
-      const matches = src.match(FORBIDDEN);
-      expect(matches).toBeNull();
+      expect(() =>
+        assertNoForbiddenLanguage(listItemsTool.description, "list_items description")
+      ).not.toThrow();
     });
   });
 

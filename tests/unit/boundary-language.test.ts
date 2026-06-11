@@ -117,3 +117,27 @@ describe("FORBIDDEN_WORDS coverage", () => {
     }
   });
 });
+
+describe("assertNoForbiddenLanguage catches specific design-required terms", () => {
+  // 5 terms the old weak regex in boundary.test.ts missed entirely
+  const designRequiredTerms: Array<[string, string]> = [
+    ["winrate in a sentence", "winrate"],
+    ["score of 9", "score"],
+    ["tier S champion", "tier"],
+    ["S-tier pick", "S-tier"],
+    ["best champion overall", "best"],
+  ];
+
+  test.each(designRequiredTerms)(
+    "assertNoForbiddenLanguage throws for '%s' (catches '%s')",
+    (text) => {
+      expect(() => assertNoForbiddenLanguage(text, "design-required-term-test")).toThrow();
+    }
+  );
+
+  test("assertNoForbiddenLanguage accepts neutral text: 'Sona's Q has a 10 second cooldown.'", () => {
+    expect(() =>
+      assertNoForbiddenLanguage("Sona's Q has a 10 second cooldown.", "neutral test")
+    ).not.toThrow();
+  });
+});
