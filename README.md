@@ -48,13 +48,16 @@ All configuration is via environment variables. Defaults are safe for local deve
 
 This server is a **pure data layer**. It MUST NOT expose fields like `best`, `optimal`, `tier`, `score`, `winrate`, or `recommended`. Any output that appears to reason about "what is best" is a bug.
 
-The boundary test enforces this contract:
+The boundary is enforced in `src/mcp/boundary-language.ts`, which exports `FORBIDDEN_WORDS` and `assertNoForbiddenLanguage(text, source)`. The current list of forbidden tokens is:
 
-```typescript
-const FORBIDDEN = /best|recommended|tier\s*list|tier\s*[sS]|should\s+(?:you|build|pick)|meta\s+pick|strong\s+pick|optimal\s*build|top\s*build|pro\s*build|build\s*order/gi;
+```
+best, recommended, recommendation, tier, optimal, score, winrate, win rate,
+pick rate, ban rate, meta, strong, broken, op, buffed, nerfed, overrated,
+underrated, must-pick, first-pick, go-to, top-tier, S-tier, A-tier, B-tier,
+C-tier, D-tier, build order, pro build, pro pick
 ```
 
-All tool responses are scanned against this regex. Any match is a test failure. Contributors must ensure no such language appears in tool descriptions, input schemas, or response data.
+All tool responses and every tool's `description` source string are scanned against this list (case-insensitive, with word boundaries where appropriate). Any match is a test failure. Contributors must ensure no such language appears in tool descriptions, input schemas, or response data.
 
 ## Development
 
@@ -72,7 +75,8 @@ All tool responses are scanned against this regex. Any match is a test failure. 
 bun run fixtures:refresh        # re-record fixtures from live CDN
 bun run smoke                   # smoke test (cached fixtures, offline)
 bun run smoke:live              # smoke test against live Data Dragon
-bun run typecheck               # TypeScript type checking
+bun run typecheck               # production typecheck (src/ only, strict)
+bun run typecheck:tests         # full-strict typecheck including tests/
 ```
 
 ### Fixtures
