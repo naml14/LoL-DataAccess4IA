@@ -87,9 +87,14 @@ export class ToolRegistry {
     }
   ): void {
     for (const tool of this.tools.values()) {
-      server.setRequestHandler(
-        { method: "tools/call" } as any,
-        async (request: any): Promise<any> => {
+      // The MCP SDK infers a strict RequestHandler<T, R> type from the callback
+    // signature. Our per-tool handlers use `request.params.name` for dispatch
+    // and return a generic `any` response, which does not match the inferred
+    // type. The two-step cast (`as unknown as`) is the minimal safe workaround.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    server.setRequestHandler(
+      { method: "tools/call" } as unknown as any,
+      async (request: any): Promise<any> => {
           // Only handle requests for this tool
           if (request.params.name !== tool.name) {
             return undefined;

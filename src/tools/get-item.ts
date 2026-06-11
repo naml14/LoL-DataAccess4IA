@@ -2,7 +2,7 @@ import { resolveVersion } from "../ddragon/versions";
 import { getItemListPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
 import { parseItemFile } from "../domain/item";
-import type { ItemRecord } from "../domain/item";
+import type { ItemRecord, ItemFile } from "../domain/item";
 import type { ToolContext } from "./_ctx";
 
 // ---------------------------------------------------------------------------
@@ -71,18 +71,18 @@ export const getItemTool = {
     }
 
     const ck = itemListCacheKey(version, locale);
-    let file = await ctx.cache.get(ck);
+    let file = (await ctx.cache.get(ck)) as ItemFile | undefined;
     if (file === undefined) {
       const raw = await ctx.client.getItemList(version, locale);
       file = parseItemFile(raw);
       await ctx.cache.set(ck, file);
     }
 
-    const itemRecord = (file as any).data[String(input.id)];
+    const itemRecord = file.data[String(input.id)];
     if (itemRecord === undefined) {
       throw new ItemNotFoundError(input.id);
     }
 
-    return itemRecord as ItemRecord;
+    return itemRecord;
   },
 };
