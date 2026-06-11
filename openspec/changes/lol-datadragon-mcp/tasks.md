@@ -138,7 +138,7 @@
 
 ## Phase 6 — Server wiring & boundary test
 
-- [ ] 6.1 Implement MCP Server and Error mapping.
+- [x] 6.1 Implement MCP Server and Error mapping.
   - TDD note: write failing test first: `tests/unit/errors.test.ts` asserts `toMcpError` returns `{ error: { code, message } }`.
   - Files touched: `src/mcp/server.ts`, `src/mcp/tool-registry.ts`, `src/mcp/errors.ts`.
   - Depends on: 5.2.
@@ -148,7 +148,7 @@
     - Covers `mcp-server` requirement `R-ERR-1`.
   - Estimated changed lines: 350.
 
-- [ ] 6.2 Implement Entry point and Boundary Guard.
+- [x] 6.2 Implement Entry point and Boundary Guard.
   - TDD note: write failing test first: `tests/integration/boundary.test.ts` iterates all tool responses against forbidden keywords.
   - Files touched: `src/index.ts`, `tests/integration/boundary.test.ts`.
   - Depends on: 6.1.
