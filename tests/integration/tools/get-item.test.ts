@@ -100,12 +100,14 @@ describe("get_item", () => {
     });
 
     test("throws not-found error when item id does not exist", async () => {
+      let thrown: unknown = null;
       try {
         await getItemTool.handler({ id: 9999 }, ctx);
-        expect.fail("Expected error to be thrown");
-      } catch (err: any) {
-        expect(err.code).toBe("not-found");
+      } catch (err) {
+        thrown = err;
       }
+      expect(thrown).not.toBeNull();
+      expect((thrown as any).code).toBe("not-found");
     });
 
     test("uses explicit version override", async () => {

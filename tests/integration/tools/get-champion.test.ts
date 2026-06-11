@@ -37,10 +37,12 @@ function makeChampionFile(champions: ReturnType<typeof champ>[]) {
   return { type: "champion" as const, format: "standar", version: "14.10.1", data };
 }
 
-/** Champions that produce ambiguity: id="A" (case-insensitive) and key="1". */
+/** Champions that produce ambiguity: id="A" (case-insensitive) and key="A".
+ * Query "A" resolves to champ "A" by id and champ "Annie" by key — different
+ * champions, same query string → ambiguous. */
 const AMBIGUOUS_FIXTURE = makeChampionFile([
-  champ("A", "1", "AmbiguousById"),   // id lookup for "A" → matches here
-  champ("Annie", "1", "Annie"),        // key lookup for "1" → matches here (ambiguous!)
+  champ("A", "A", "AmbiguousById"),   // id lookup for "A" → matches here
+  champ("Annie", "A", "Annie"),        // key lookup for "A" → matches here (ambiguous!)
 ]);
 
 /** Normal fixture for happy-path tests. */
@@ -119,25 +121,26 @@ describe("get_champion", () => {
     });
 
     test("throws not-found error when champion does not exist", async () => {
+      let thrown: unknown = null;
       try {
         await getChampionTool.handler({ idOrKey: "NonExistent" }, ctx);
-        expect.fail("Expected error to be thrown");
-      } catch (err: any) {
-        expect(err.code).toBe("not-found");
+      } catch (err) {
+        thrown = err;
       }
+      expect(thrown).not.toBeNull();
+      expect((thrown as any).code).toBe("not-found");
     });
 
     test("throws ambiguous error when id and key lookup resolve to different champions", async () => {
-      // Replace fixture with the ambiguous one.
       setupFetch(AMBIGUOUS_FIXTURE);
-
+      let thrown: unknown = null;
       try {
-        // Query "A" matches id="A" and key="1" (Annie) → ambiguous
         await getChampionTool.handler({ idOrKey: "A" }, ctx);
-        expect.fail("Expected ambiguous error");
-      } catch (err: any) {
-        expect(err.message).toContain("ambiguous");
+      } catch (err) {
+        thrown = err;
       }
+      expect(thrown).not.toBeNull();
+      expect((thrown as any).message.toLowerCase()).toContain("ambiguous");
     });
 
     test("uses explicit version override", async () => {

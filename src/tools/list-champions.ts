@@ -1,7 +1,5 @@
 import { resolveVersion } from "../ddragon/versions";
-import { getChampionPath } from "../ddragon/endpoints";
-import { cacheKey } from "../cache/key";
-import { parseChampionFile } from "../domain/champion";
+import { getChampionFile } from "../ddragon/champion-helpers";
 import type { ChampionRecord } from "../domain/champion";
 import type { ToolContext } from "./_ctx";
 
@@ -46,11 +44,6 @@ const InputSchema = {
 
 const VERSION_CACHE_KEY = "ddragon:resolved-version:__singleton";
 
-/** Cache key for champion list payload. */
-function championListCacheKey(version: string, locale: string): string {
-  return cacheKey(version, locale, getChampionPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, ""));
-}
-
 /** Map a ChampionRecord to compact form. */
 function toCompact(champ: ChampionRecord): CompactChampion {
   return {
@@ -93,24 +86,13 @@ export const listChampionsTool = {
       }
     }
 
-    const ck = championListCacheKey(version, locale);
-    const cached = await ctx.cache.get(ck);
-    if (cached !== undefined) {
-      const parsed = cached as { version: string; locale: string; champions: CompactChampion[] };
-      return { ...parsed, locale }; // preserve locale from input
-    }
-
-    // Fetch and parse champion list.
-    const raw = await ctx.client.getChampionList(version, locale);
-    const file = parseChampionFile(raw);
+    // Use the shared helper: fetches and caches the raw ChampionFile
+    // at the canonical key (championDataKey) so both list_champions
+    // and get_champion read from / write to the same cache entry.
+    const file = await getChampionFile(version, locale, ctx.client, ctx.cache);
 
     const champions: CompactChampion[] = Object.values(file.data).map(toCompact);
 
-    const result: ListChampionsOutput = { version, locale, champions };
-
-    // Cache the result.
-    await ctx.cache.set(ck, result);
-
-    return result;
+    return { version, locale, champions };
   },
 };

@@ -60,7 +60,7 @@ function toCompact(spell: SummonerSpellRecord): CompactSummonerSpell {
     name: spell.name,
     description: spell.description,
     tooltip: spell.tooltip ?? "",
-    maxrank: spell.maxrank,
+    maxrank: spell.maxrank ?? 0,
     cooldown: spell.cooldown ?? [],
     key: spell.key,
     image: { full: spell.image.full },

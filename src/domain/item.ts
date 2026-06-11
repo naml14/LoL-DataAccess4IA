@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ItemId, Version } from "./shared";
+import { Version } from "./shared";
 
 // ---------------------------------------------------------------------------
 // ItemImage

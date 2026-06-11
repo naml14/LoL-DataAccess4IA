@@ -38,7 +38,7 @@ function setupFixtureFetch(): void {
   const summonerData = readFixtureJson("summoner.json");
   const profileIconData = readFixtureJson("profileicon.json");
 
-  globalThis.fetch = async (url: string) => {
+  globalThis.fetch = (async (url: string) => {
     const urlStr = url as string;
     if (urlStr.includes("/api/versions.json")) {
       return new Response(JSON.stringify([FIXTURE_VERSION]), {
@@ -77,7 +77,7 @@ function setupFixtureFetch(): void {
       });
     }
     return new Response("Not Found", { status: 404 });
-  };
+  }) as typeof fetch;
 }
 
 // ---------------------------------------------------------------------------

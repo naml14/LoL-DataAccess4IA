@@ -111,7 +111,7 @@ export function loadConfig(): Readonly<Config> {
     const msg =
       first.message +
       " " +
-      (first.received !== undefined ? `"${first.received}" ` : "") +
+      ("received" in first && first.received !== undefined ? `"${first.received}" ` : "") +
       (first.path.length > 0 ? `(at ${first.path.join(".")}) ` : "") +
       (first.code === "custom" ? first.message : `(${first.code})`);
     throw new Error(msg);
@@ -136,5 +136,5 @@ function deepFreeze<T>(obj: T): T {
       (frozen as Record<string, unknown>)[key]
     );
   }
-  return Object.freeze(frozen);
+  return Object.freeze(frozen) as T;
 }

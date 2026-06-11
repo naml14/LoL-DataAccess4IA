@@ -2,7 +2,6 @@ import { resolveVersion } from "../ddragon/versions";
 import { getRuneListPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
 import { parseRuneTreesFile } from "../domain/rune";
-import type { RuneTreesFile } from "../domain/rune";
 import type { ToolContext } from "./_ctx";
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,6 @@
 import { resolveVersion } from "../ddragon/versions";
-import { getChampionPath } from "../ddragon/endpoints";
-import { cacheKey } from "../cache/key";
-import { parseChampionFile, pickChampion } from "../domain/champion";
+import { getChampionFile } from "../ddragon/champion-helpers";
+import { pickChampion } from "../domain/champion";
 import type { ChampionRecord } from "../domain/champion";
 import type { ToolContext } from "./_ctx";
 
@@ -44,10 +43,6 @@ const InputSchema = {
 
 const VERSION_CACHE_KEY = "ddragon:resolved-version:__singleton";
 
-function championListCacheKey(version: string, locale: string): string {
-  return cacheKey(version, locale, getChampionPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, ""));
-}
-
 // ---------------------------------------------------------------------------
 // Tool definition
 // ---------------------------------------------------------------------------
@@ -77,31 +72,35 @@ export const getChampionTool = {
       }
     }
 
-    const ck = championListCacheKey(version, locale);
-    let file = await ctx.cache.get(ck);
-    if (file === undefined) {
-      const raw = await ctx.client.getChampionList(version, locale);
-      file = parseChampionFile(raw);
-      await ctx.cache.set(ck, file);
-    }
+    // Use the shared helper: fetches and caches the raw ChampionFile
+    // at the canonical key (championDataKey) so both list_champions
+    // and get_champion read from / write to the same cache entry.
+    const file = await getChampionFile(version, locale, ctx.client, ctx.cache);
 
     // pickChampion checks id-ambiguity and key-ambiguity separately.
     // We also need to check cross-ambiguity: if id lookup and key lookup
     // both return (different) single champions, that is also ambiguous.
     const queryLower = input.idOrKey.toLowerCase();
-    const byId = Object.values((file as any).data).filter(
+    const byId = Object.values(file.data).filter(
       (c: ChampionRecord) => c.id.toLowerCase() === queryLower
     );
-    const byKey = Object.values((file as any).data).filter(
+    const byKey = Object.values(file.data).filter(
       (c: ChampionRecord) => c.key === input.idOrKey
     );
 
-    // Cross-ambiguity: id lookup and key lookup resolve to different champions.
+    // Ambiguity: any of these is ambiguous.
+    // - byId.length > 1: multiple champions share this id (case-insensitive)
+    // - byKey.length > 1: multiple champions share this key
+    // - byId.length === 1 && byKey.length === 1 && byId[0] !== byKey[0]:
+    //   cross-ambiguity — id and key resolve to different champions
+    if (byId.length > 1 || byKey.length > 1) {
+      throw new ChampionAmbiguousError(input.idOrKey);
+    }
     if (byId.length === 1 && byKey.length === 1 && byId[0] !== byKey[0]) {
       throw new ChampionAmbiguousError(input.idOrKey);
     }
 
-    const result = pickChampion(file as any, input.idOrKey);
+    const result = pickChampion(file, input.idOrKey);
     if (!result.ok) {
       if (result.error === "not_found") {
         throw new ChampionNotFoundError(input.idOrKey);
