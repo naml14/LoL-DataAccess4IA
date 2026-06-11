@@ -1,5 +1,5 @@
 import { test, expect, beforeEach, afterEach } from "bun:test";
-import { loadConfig } from "../../src/config";
+import { loadConfig, defaultCacheDir } from "../../src/config";
 
 // Store original env to restore after each test
 let originalEnv: Record<string, string | undefined>;
@@ -36,7 +36,7 @@ test("loadConfig returns correct defaults when no env vars are set", () => {
   expect(config.locale).toBe("en_US");
   expect(config.ttlSeconds).toBe(900);
   expect(config.pinVersion).toBeNull();
-  expect(config.cacheDir).toBe("./.cache/ddragon");
+  expect(config.cacheDir).toBe(defaultCacheDir());
   expect(config.httpTimeoutMs).toBe(5000);
   expect(config.logLevel).toBe("info");
 });
