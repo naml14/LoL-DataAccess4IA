@@ -8,12 +8,11 @@ import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 function makeItemFile(items: Array<{
   id: number; name: string; plaintext: string;
   gold: { base: number; total: number; sell: number };
-  tags: Record<string, boolean>; imageFull: string;
+  tags: string[]; imageFull: string;
 }>) {
   const data: Record<string, unknown> = {};
   for (const item of items) {
     data[String(item.id)] = {
-      id: item.id,
       name: item.name,
       description: "<description>",
       colloq: "",
@@ -31,9 +30,9 @@ function makeItemFile(items: Array<{
 }
 
 const ITEM_FIXTURE = makeItemFile([
-  { id: 1001, name: "Boots of Speed", plaintext: "Slightly movement speed", gold: { base: 300, total: 300, sell: 210 }, tags: { boots: true }, imageFull: "1001.png" },
-  { id: 1036, name: "Long Sword", plaintext: "Slightly attack damage", gold: { base: 350, total: 350, sell: 245 }, tags: { damage: true, onhit: true }, imageFull: "1036.png" },
-  { id: 3001, name: "Amplifying Tome", plaintext: "Slightly ability power", gold: { base: 435, total: 435, sell: 304 }, tags: { mana: true, "spell damage": true }, imageFull: "3001.png" },
+  { id: 1001, name: "Boots of Speed", plaintext: "Slightly movement speed", gold: { base: 300, total: 300, sell: 210 }, tags: ["Boots"], imageFull: "1001.png" },
+  { id: 1036, name: "Long Sword", plaintext: "Slightly attack damage", gold: { base: 350, total: 350, sell: 245 }, tags: ["Damage", "OnHit"], imageFull: "1036.png" },
+  { id: 3001, name: "Amplifying Tome", plaintext: "Slightly ability power", gold: { base: 435, total: 435, sell: 304 }, tags: ["Mana", "SpellDamage"], imageFull: "3001.png" },
 ]);
 
 describe("list_items", () => {
@@ -98,7 +97,6 @@ describe("list_items", () => {
       const result = await listItemsTool.handler({}, ctx);
       const item = (result as any).items[0];
 
-      expect(typeof item.id).toBe("number");
       expect(typeof item.name).toBe("string");
       expect(typeof item.plaintext).toBe("string");
       expect(typeof item.gold).toBe("object");
@@ -112,14 +110,14 @@ describe("list_items", () => {
 
     test("item values match fixture data", async () => {
       const result = await listItemsTool.handler({}, ctx);
-      const itemMap: Record<number, unknown> = {};
+      const itemMap: Record<string, unknown> = {};
       for (const item of (result as any).items) {
-        itemMap[item.id] = item;
+        itemMap[item.name] = item;
       }
 
-      expect((itemMap[1001] as any).name).toBe("Boots of Speed");
-      expect((itemMap[1036] as any).gold.total).toBe(350);
-      expect((itemMap[3001] as any).tags).toContain("mana");
+      expect((itemMap["Boots of Speed"] as any).gold.total).toBe(300);
+      expect((itemMap["Long Sword"] as any).gold.total).toBe(350);
+      expect((itemMap["Amplifying Tome"] as any).tags).toContain("Mana");
     });
 
     test("uses config locale when no locale input provided", async () => {

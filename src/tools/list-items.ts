@@ -12,7 +12,6 @@ import type { ToolContext } from "./_ctx";
 
 /** Compact item record returned by list_items. */
 export type CompactItem = {
-  id: number;
   name: string;
   plaintext: string;
   gold: { total: number; sell: number; base: number };
@@ -53,7 +52,6 @@ function itemListCacheKey(version: string, locale: string): string {
 /** Map an ItemRecord to compact form. */
 function toCompact(item: ItemRecord): CompactItem {
   return {
-    id: item.id,
     name: item.name,
     plaintext: item.plaintext ?? "",
     gold: {
@@ -61,8 +59,7 @@ function toCompact(item: ItemRecord): CompactItem {
       sell: item.gold.sell,
       base: item.gold.base,
     },
-    // tags is Record<string, boolean> — compact form is the key array.
-    tags: item.tags ? Object.keys(item.tags) : [],
+    tags: item.tags ?? [],
     image: { full: item.image.full },
   };
 }

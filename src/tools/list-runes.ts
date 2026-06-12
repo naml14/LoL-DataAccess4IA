@@ -2,7 +2,7 @@ import { resolveVersion } from "../ddragon/versions";
 import { getRuneListPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
 import { resolvedVersionCacheKey } from "../cache/key";
-import { parseRuneTreesFile } from "../domain/rune";
+import { parseRuneTreesFile, type RuneTree as RuneTreeType } from "../domain/rune";
 import type { ToolContext } from "./_ctx";
 
 // ---------------------------------------------------------------------------
@@ -38,7 +38,7 @@ export type RuneTree = {
 export type ListRunesOutput = {
   version: string;
   locale: string;
-  trees: RuneTree[];
+  trees: RuneTreeType[];
 };
 
 // ---------------------------------------------------------------------------
@@ -100,7 +100,7 @@ export const listRunesTool = {
     }
 
     const raw = await ctx.client.getRuneList(version, locale);
-    const trees = parseRuneTreesFile(raw);
+    const trees: RuneTree[] = parseRuneTreesFile(raw) as RuneTree[];
 
     const result: ListRunesOutput = { version, locale, trees };
 

@@ -33,10 +33,8 @@ export const SummonerSpellRecord = z.object({
   key: z.string(),
   tooltip: z.string().optional(),
   maxrank: z.number().int().optional(),
-  cooldown: z.array(z.number().int()).optional(),
+  cooldown: z.array(z.number()).optional(),
   summonerLevel: z.number().int(),
-  modes: z.array(z.string()).optional(),
-  icon: z.string(),
   image: SummonerSpellImage,
 }).passthrough();
 

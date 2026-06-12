@@ -8,12 +8,11 @@ import { assertNoForbiddenLanguage } from "../../../src/mcp/boundary-language";
 function makeItemFile(items: Array<{
   id: number; name: string; plaintext: string;
   gold: { base: number; total: number; sell: number };
-  tags: Record<string, boolean>; imageFull: string;
+  tags: string[]; imageFull: string;
 }>) {
   const data: Record<string, unknown> = {};
   for (const item of items) {
     data[String(item.id)] = {
-      id: item.id,
       name: item.name,
       description: "<description>",
       colloq: "",
@@ -31,9 +30,9 @@ function makeItemFile(items: Array<{
 }
 
 const ITEM_FIXTURE = makeItemFile([
-  { id: 1001, name: "Boots of Speed", plaintext: "Slightly movement speed", gold: { base: 300, total: 300, sell: 210 }, tags: { boots: true }, imageFull: "1001.png" },
-  { id: 1036, name: "Long Sword", plaintext: "Slightly attack damage", gold: { base: 350, total: 350, sell: 245 }, tags: { damage: true, onhit: true }, imageFull: "1036.png" },
-  { id: 3001, name: "Amplifying Tome", plaintext: "Slightly ability power", gold: { base: 435, total: 435, sell: 304 }, tags: { mana: true, "spell damage": true }, imageFull: "3001.png" },
+  { id: 1001, name: "Boots of Speed", plaintext: "Slightly movement speed", gold: { base: 300, total: 300, sell: 210 }, tags: ["Boots"], imageFull: "1001.png" },
+  { id: 1036, name: "Long Sword", plaintext: "Slightly attack damage", gold: { base: 350, total: 350, sell: 245 }, tags: ["Damage", "OnHit"], imageFull: "1036.png" },
+  { id: 3001, name: "Amplifying Tome", plaintext: "Slightly ability power", gold: { base: 435, total: 435, sell: 304 }, tags: ["Mana", "SpellDamage"], imageFull: "3001.png" },
 ]);
 
 describe("get_item", () => {
@@ -85,7 +84,6 @@ describe("get_item", () => {
   describe("handler", () => {
     test("returns full item record when found by id", async () => {
       const result = await getItemTool.handler({ id: 1001 }, ctx);
-      expect((result as any).id).toBe(1001);
       expect((result as any).name).toBe("Boots of Speed");
       expect(typeof (result as any).description).toBe("string");
       expect(typeof (result as any).gold).toBe("object");
@@ -93,7 +91,6 @@ describe("get_item", () => {
 
     test("returns full item record for different id", async () => {
       const result = await getItemTool.handler({ id: 3001 }, ctx);
-      expect((result as any).id).toBe(3001);
       expect((result as any).name).toBe("Amplifying Tome");
     });
 
@@ -110,12 +107,12 @@ describe("get_item", () => {
 
     test("uses explicit version override", async () => {
       const result = await getItemTool.handler({ id: 1001, version: "13.1.1" }, ctx);
-      expect((result as any).id).toBe(1001);
+      expect((result as any).name).toBe("Boots of Speed");
     });
 
     test("uses explicit locale override", async () => {
       const result = await getItemTool.handler({ id: 1001, locale: "es_ES" }, ctx);
-      expect((result as any).id).toBe(1001);
+      expect((result as any).name).toBe("Boots of Speed");
     });
 
     test("cache hit on second call (no network)", async () => {

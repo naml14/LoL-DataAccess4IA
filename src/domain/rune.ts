@@ -20,9 +20,8 @@ export type Rune = z.infer<typeof Rune>;
 // ---------------------------------------------------------------------------
 
 export const RuneSlot = z.object({
-  slotLabel: z.string(),
   runes: z.array(Rune),
-});
+}).passthrough();
 
 export type RuneSlot = z.infer<typeof RuneSlot>;
 

@@ -52,16 +52,16 @@ export type ItemStats = z.infer<typeof ItemStats>;
  * Uses `.passthrough()` for stats and tags since Riot adds keys freely.
  */
 export const ItemRecord = z.object({
-  id: z.number().int(),
+  id: z.number().int().optional(),
   name: z.string(),
   description: z.string(),
   colloq: z.string().optional(),
   plaintext: z.string().optional(),
-  into: z.array(z.number().int()).optional(),
-  from: z.array(z.number().int()).optional(),
+  into: z.array(z.string()).optional(),
+  from: z.array(z.string()).optional(),
   image: ItemImage,
   gold: ItemGold,
-  tags: z.record(z.string(), z.boolean()).optional(),
+  tags: z.array(z.string()).optional(),
   maps: z.record(z.string(), z.boolean()).optional(),
   stats: ItemStats.optional(),
 }).passthrough();

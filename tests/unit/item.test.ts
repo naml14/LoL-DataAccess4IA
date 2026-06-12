@@ -11,12 +11,11 @@ const syntheticItemFile: ItemFile = {
   version: "16.12.1",
   data: {
     1001: {
-      id: 1001,
       name: "Boots of Speed",
       description: "<manaRegen>A basic item that increases Movement Speed.</manaRegen>",
       colloq: "",
       plaintext: "Slightly increases Movement Speed",
-      into: [3006, 3020],
+      into: ["3006", "3020"],
       image: {
         full: "1001.png",
         sprite: "item0.png",
@@ -27,17 +26,16 @@ const syntheticItemFile: ItemFile = {
         h: 64,
       },
       gold: { base: 300, purchasable: true, total: 300, sell: 210 },
-      tags: {},
+      tags: [],
       maps: { "11": true, "12": true, "21": true, "22": true },
       stats: { flatMovementSpeed: 50 },
     },
     3006: {
-      id: 3006,
       name: "Berserker's Greaves",
-      description: "<atkSpeed>+45% Attack Speed.< /atkSpeed>",
+      description: "<atkSpeed>+45% Attack Speed.</atkSpeed>",
       colloq: "",
       plaintext: "Enhances Movement Speed and Attack Speed",
-      from: [1001],
+      from: ["1001"],
       into: [],
       image: {
         full: "3006.png",
@@ -49,7 +47,7 @@ const syntheticItemFile: ItemFile = {
         h: 64,
       },
       gold: { base: 500, purchasable: true, total: 800, sell: 560 },
-      tags: { "AttackSpeed": true },
+      tags: ["AttackSpeed"],
       maps: { "11": true, "12": true, "21": true, "22": true },
       stats: { flatMovementSpeed: 45, percentAttackSpeedMod: 0.45 },
     },
@@ -94,11 +92,11 @@ describe("ItemRecord", () => {
   test("preserves from and into recipe arrays", () => {
     const parsed = ItemFile.parse(syntheticItemFile);
     const boots = parsed.data[1001];
-    expect(boots.into).toEqual([3006, 3020]);
+    expect(boots.into).toEqual(["3006", "3020"]);
     expect(boots.from).toEqual(undefined); // base item
 
     const zerkers = parsed.data[3006];
-    expect(zerkers.from).toEqual([1001]);
+    expect(zerkers.from).toEqual(["1001"]);
     expect(zerkers.into).toEqual([]);
   });
 
