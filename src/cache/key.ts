@@ -31,6 +31,26 @@ export function cacheKeyForResource(
   return cacheKey(version, locale, path);
 }
 
+/**
+ * Cache key for the resolved live version string.
+ *
+ * Format: ddragon:__session:resolved-version:en_US
+ *
+ * The 4-segment shape matches DiskCache.keyToPath's strict format. The
+ * `__session` "version" segment puts this entry in its own directory
+ * (`<cacheDir>/ddragon/__session/...`) so the FIFO prune (which keeps the
+ * newest 3 real Data Dragon versions) does not evict it. It is still
+ * subject to TTL cleanup.
+ *
+ * The previous key `ddragon:resolved-version:__singleton` had only 2
+ * segments and crashed at runtime with "Invalid cache key format" when
+ * the server was run with the real TieredCache (memory + disk) — the bug
+ * was hidden by the smoke test, which only uses MemoryCache.
+ */
+export function resolvedVersionCacheKey(): string {
+  return "ddragon:__session:resolved-version:en_US";
+}
+
 // ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------

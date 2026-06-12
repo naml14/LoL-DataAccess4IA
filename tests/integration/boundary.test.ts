@@ -63,7 +63,7 @@ function buildMockContext(fixtures: {
 
   // Pre-populate cache with fixtures
   if (fixtures.version) {
-    mockCache.set("ddragon:resolved-version:__singleton", fixtures.version);
+    mockCache.set("ddragon:__session:resolved-version:en_US", fixtures.version);
   }
   if (fixtures.champions) {
     mockCache.set(

@@ -1,4 +1,6 @@
 import { resolveVersion } from "../ddragon/versions";
+import { resolvedVersionCacheKey } from "../cache/key";
+
 import { getChampionFile } from "../ddragon/champion-helpers";
 import type { ChampionRecord } from "../domain/champion";
 import type { ToolContext } from "./_ctx";
@@ -42,8 +44,6 @@ const InputSchema = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const VERSION_CACHE_KEY = "ddragon:resolved-version:__singleton";
-
 /** Map a ChampionRecord to compact form. */
 function toCompact(champ: ChampionRecord): CompactChampion {
   return {
@@ -76,19 +76,19 @@ export const listChampionsTool = {
     if (input.version) {
       version = input.version;
     } else {
-      const cachedVersion = await ctx.cache.get(VERSION_CACHE_KEY);
+      const cachedVersion = await ctx.cache.get(resolvedVersionCacheKey());
       if (cachedVersion !== undefined) {
         version = cachedVersion as string;
       } else {
         const info = await resolveVersion();
         version = info.current;
-        await ctx.cache.set(VERSION_CACHE_KEY, version);
+        await ctx.cache.set(resolvedVersionCacheKey(), version);
       }
     }
 
     // Use the shared helper: fetches and caches the raw ChampionFile
     // at the canonical key (championDataKey) so both list_champions
-    // and get_champion read from / write to the same cache entry.
+    // and get_champion share the same cache entry.
     const file = await getChampionFile(version, locale, ctx.client, ctx.cache);
 
     const champions: CompactChampion[] = Object.values(file.data).map(toCompact);

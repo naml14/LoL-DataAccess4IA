@@ -1,6 +1,7 @@
 import { resolveVersion } from "../ddragon/versions";
 import { getItemListPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
+import { resolvedVersionCacheKey } from "../cache/key";
 import { parseItemFile } from "../domain/item";
 import type { ItemRecord } from "../domain/item";
 import type { ToolContext } from "./_ctx";
@@ -45,8 +46,6 @@ const InputSchema = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const VERSION_CACHE_KEY = "ddragon:resolved-version:__singleton";
-
 function itemListCacheKey(version: string, locale: string): string {
   return cacheKey(version, locale, getItemListPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, ""));
 }
@@ -87,13 +86,13 @@ export const listItemsTool = {
     if (input.version) {
       version = input.version;
     } else {
-      const cachedVersion = await ctx.cache.get(VERSION_CACHE_KEY);
+      const cachedVersion = await ctx.cache.get(resolvedVersionCacheKey());
       if (cachedVersion !== undefined) {
         version = cachedVersion as string;
       } else {
         const info = await resolveVersion();
         version = info.current;
-        await ctx.cache.set(VERSION_CACHE_KEY, version);
+        await ctx.cache.set(resolvedVersionCacheKey(), version);
       }
     }
 

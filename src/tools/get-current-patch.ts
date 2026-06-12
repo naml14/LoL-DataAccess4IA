@@ -1,5 +1,5 @@
 import { resolveVersion } from "../ddragon/versions";
-import { cacheKey } from "../cache/key";
+import { cacheKey, resolvedVersionCacheKey } from "../cache/key";
 import type { ToolContext } from "./_ctx";
 
 /**
@@ -20,14 +20,6 @@ const InputSchema = {
  */
 function versionsCacheKey(version: string): string {
   return cacheKey(version, "en_US", "/api/versions.json");
-}
-
-/**
- * Cache key for the resolved version string itself (version-only cache).
- * This lets us avoid calling resolveVersion() (network) on every invocation.
- */
-function resolvedVersionCacheKey(): string {
-  return "ddragon:resolved-version:__singleton";
 }
 
 export const getCurrentPatchTool = {

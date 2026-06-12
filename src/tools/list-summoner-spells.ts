@@ -1,6 +1,7 @@
 import { resolveVersion } from "../ddragon/versions";
 import { getSummonerSpellsPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
+import { resolvedVersionCacheKey } from "../cache/key";
 import { parseSummonerSpellFile } from "../domain/summoner";
 import type { SummonerSpellRecord } from "../domain/summoner";
 import type { ToolContext } from "./_ctx";
@@ -47,8 +48,6 @@ const InputSchema = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const VERSION_CACHE_KEY = "ddragon:resolved-version:__singleton";
-
 function summonerListCacheKey(version: string, locale: string): string {
   return cacheKey(version, locale, getSummonerSpellsPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, ""));
 }
@@ -86,13 +85,13 @@ export const listSummonerSpellsTool = {
     if (input.version) {
       version = input.version;
     } else {
-      const cachedVersion = await ctx.cache.get(VERSION_CACHE_KEY);
+      const cachedVersion = await ctx.cache.get(resolvedVersionCacheKey());
       if (cachedVersion !== undefined) {
         version = cachedVersion as string;
       } else {
         const info = await resolveVersion();
         version = info.current;
-        await ctx.cache.set(VERSION_CACHE_KEY, version);
+        await ctx.cache.set(resolvedVersionCacheKey(), version);
       }
     }
 
