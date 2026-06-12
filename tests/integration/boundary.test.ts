@@ -6,7 +6,6 @@ import { listItemsTool } from "../../src/tools/list-items";
 import { getItemTool } from "../../src/tools/get-item";
 import { listRunesTool } from "../../src/tools/list-runes";
 import { listSummonerSpellsTool } from "../../src/tools/list-summoner-spells";
-import { listProfileIconsTool } from "../../src/tools/list-profile-icons";
 import { createToolContext } from "../../src/tools/_ctx";
 import type { ToolContext } from "../../src/tools/_ctx";
 import { assertNoForbiddenLanguage } from "../../src/mcp/boundary-language";
@@ -23,7 +22,6 @@ const ALL_TOOLS = [
   getItemTool,
   listRunesTool,
   listSummonerSpellsTool,
-  listProfileIconsTool,
 ];
 
 // ---------------------------------------------------------------------------
@@ -38,7 +36,6 @@ const TOOL_SOURCE_FILES: Record<string, string> = {
   get_item: "src/tools/get-item.ts",
   list_runes: "src/tools/list-runes.ts",
   list_summoner_spells: "src/tools/list-summoner-spells.ts",
-  list_profile_icons: "src/tools/list-profile-icons.ts",
 };
 
 // ---------------------------------------------------------------------------
@@ -51,7 +48,6 @@ function buildMockContext(fixtures: {
   items?: unknown;
   runes?: unknown;
   summonerSpells?: unknown;
-  profileIcons?: unknown;
 }): ToolContext {
   const mockCache = new Map<string, unknown>();
   const mockLogger = {
@@ -89,19 +85,12 @@ function buildMockContext(fixtures: {
       fixtures.summonerSpells
     );
   }
-  if (fixtures.profileIcons) {
-    mockCache.set(
-      "ddragon:14.10.1:en_US:/cdn/14.10.1/data/en_US/profileicon.json",
-      fixtures.profileIcons
-    );
-  }
 
   const mockClient = {
     getChampionList: async () => fixtures.champions,
     getItemList: async () => fixtures.items,
     getRuneList: async () => fixtures.runes,
     getSummonerList: async () => fixtures.summonerSpells,
-    getProfileIconList: async () => fixtures.profileIcons,
   } as unknown as ToolContext["client"];
 
   return createToolContext({
@@ -239,20 +228,6 @@ test("boundary: list_summoner_spells response contains no reasoning language", a
   const result = await listSummonerSpellsTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
   expect(() => assertNoForbiddenLanguage(serialized, "list_summoner_spells response")).not.toThrow();
-});
-
-test("boundary: list_profile_icons response contains no reasoning language", async () => {
-  const iconsFile = {
-    type: "profileicon",
-    version: "14.10.1",
-    data: {
-      "1": { id: 1, image: { full: "profileicon/1.png" } },
-    },
-  };
-  const ctx = buildMockContext({ version: "14.10.1", profileIcons: iconsFile });
-  const result = await listProfileIconsTool.handler({}, ctx);
-  const serialized = JSON.stringify(result);
-  expect(() => assertNoForbiddenLanguage(serialized, "list_profile_icons response")).not.toThrow();
 });
 
 // ---------------------------------------------------------------------------

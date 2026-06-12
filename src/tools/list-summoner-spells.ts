@@ -2,7 +2,7 @@ import { resolveVersion } from "../ddragon/versions";
 import { getSummonerSpellsPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
 import { resolvedVersionCacheKey } from "../cache/key";
-import { parseSummonerSpellFile } from "../domain/summoner";
+import { parseSummonerSpellFile, type SummonerSpellFile } from "../domain/summoner";
 import type { SummonerSpellRecord } from "../domain/summoner";
 import type { ToolContext } from "./_ctx";
 
@@ -97,19 +97,18 @@ export const listSummonerSpellsTool = {
 
     const ck = summonerListCacheKey(version, locale);
     const cached = await ctx.cache.get(ck);
+    let file: SummonerSpellFile | undefined;
     if (cached !== undefined) {
-      const parsed = cached as ListSummonerSpellsOutput;
-      return { ...parsed, locale };
+      file = cached as SummonerSpellFile;
+    } else {
+      const raw = await ctx.client.getSummonerList(version, locale);
+      file = parseSummonerSpellFile(raw);
+      await ctx.cache.set(ck, file);
     }
-
-    const raw = await ctx.client.getSummonerList(version, locale);
-    const file = parseSummonerSpellFile(raw);
 
     const spells: CompactSummonerSpell[] = Object.values(file.data).map(toCompact);
 
     const result: ListSummonerSpellsOutput = { version, locale, count: spells.length, spells };
-
-    await ctx.cache.set(ck, result);
 
     return result;
   },

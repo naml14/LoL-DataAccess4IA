@@ -7,8 +7,6 @@ import { listItemsTool } from "../../src/tools/list-items";
 import { getItemTool } from "../../src/tools/get-item";
 import { listRunesTool } from "../../src/tools/list-runes";
 import { listSummonerSpellsTool } from "../../src/tools/list-summoner-spells";
-import { listProfileIconsTool } from "../../src/tools/list-profile-icons";
-import { z } from "zod";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -24,7 +22,6 @@ const ALL_TOOLS = [
   getItemTool,
   listRunesTool,
   listSummonerSpellsTool,
-  listProfileIconsTool,
 ];
 
 const EXPECTED_NAMES = [
@@ -35,17 +32,16 @@ const EXPECTED_NAMES = [
   "get_item",
   "list_runes",
   "list_summoner_spells",
-  "list_profile_icons",
 ];
 
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
-test("ToolRegistry: lists all 8 tools", () => {
+test("ToolRegistry: lists all 7 tools", () => {
   const registry = new ToolRegistry();
   const tools = registry.listTools();
-  expect(tools).toHaveLength(8);
+  expect(tools).toHaveLength(7);
 });
 
 test("ToolRegistry: tools have correct names", () => {
@@ -102,7 +98,6 @@ test("ToolRegistry: tool descriptions scanned from source files contain no reaso
     get_item: "src/tools/get-item.ts",
     list_runes: "src/tools/list-runes.ts",
     list_summoner_spells: "src/tools/list-summoner-spells.ts",
-    list_profile_icons: "src/tools/list-profile-icons.ts",
   };
 
   const registry = new ToolRegistry();

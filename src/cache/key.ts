@@ -3,7 +3,6 @@ import {
   getItemListPath,
   getRuneListPath,
   getSummonerSpellsPath,
-  getProfileIconPath,
   getVersionsPath,
 } from "../ddragon/endpoints";
 
@@ -25,7 +24,7 @@ export function cacheKey(version: string, locale: string, path: string): string 
 export function cacheKeyForResource(
   version: string,
   locale: string,
-  resource: "champion" | "item" | "rune" | "summoner" | "profileicon" | "versions"
+  resource: "champion" | "item" | "rune" | "summoner" | "versions"
 ): string {
   const path = canonicalPath(version, locale, resource);
   return cacheKey(version, locale, path);
@@ -58,7 +57,7 @@ export function resolvedVersionCacheKey(): string {
 function canonicalPath(
   version: string,
   locale: string,
-  resource: "champion" | "item" | "rune" | "summoner" | "profileicon" | "versions"
+  resource: "champion" | "item" | "rune" | "summoner" | "versions"
 ): string {
   switch (resource) {
     case "champion":
@@ -69,8 +68,6 @@ function canonicalPath(
       return getRuneListPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, "");
     case "summoner":
       return getSummonerSpellsPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, "");
-    case "profileicon":
-      return getProfileIconPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, "");
     case "versions":
       return getVersionsPath().replace(/^https:\/\/ddragon\.leagueoflegends\.com/, "");
   }

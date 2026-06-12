@@ -7,7 +7,6 @@ import { listItemsTool } from "../tools/list-items";
 import { getItemTool } from "../tools/get-item";
 import { listRunesTool } from "../tools/list-runes";
 import { listSummonerSpellsTool } from "../tools/list-summoner-spells";
-import { listProfileIconsTool } from "../tools/list-profile-icons";
 import type { ToolContext } from "../tools/_ctx";
 import { createToolContext } from "../tools/_ctx";
 import { toMcpError } from "./errors";
@@ -67,7 +66,6 @@ export class ToolRegistry {
     this.register(getItemTool);
     this.register(listRunesTool);
     this.register(listSummonerSpellsTool);
-    this.register(listProfileIconsTool);
   }
 
   /**

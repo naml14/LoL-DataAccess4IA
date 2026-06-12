@@ -124,15 +124,6 @@ describe("DDragonClient", () => {
     expect(result).toEqual(fixture);
   });
 
-  // --- getProfileIconList ---
-
-  test("getProfileIconList returns profile icon data", async () => {
-    const fixture = { data: { 1: { id: 1, image: {} } } };
-    globalThis.fetch = makeMockFetch(okResponse(fixture)) as typeof fetch;
-    const result = await client.getProfileIconList("14.10.1", "en_US");
-    expect(result).toEqual(fixture);
-  });
-
   // --- Timeout ---
 
   test("timeout returns a timeout error when request exceeds configured timeout", async () => {

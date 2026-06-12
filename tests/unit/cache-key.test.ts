@@ -55,11 +55,6 @@ describe("cacheKeyForResource", () => {
     expect(key).toBe("ddragon:14.10.1:en_US:/cdn/14.10.1/data/en_US/summoner.json");
   });
 
-  test("profileicon maps to profile icon path", () => {
-    const key = cacheKeyForResource("14.10.1", "en_US", "profileicon");
-    expect(key).toBe("ddragon:14.10.1:en_US:/cdn/14.10.1/data/en_US/profileicon.json");
-  });
-
   test("versions maps to versions.json path", () => {
     const key = cacheKeyForResource("14.10.1", "en_US", "versions");
     expect(key).toBe("ddragon:14.10.1:en_US:/api/versions.json");

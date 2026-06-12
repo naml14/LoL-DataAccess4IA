@@ -2,7 +2,7 @@ import { resolveVersion } from "../ddragon/versions";
 import { getItemListPath } from "../ddragon/endpoints";
 import { cacheKey } from "../cache/key";
 import { resolvedVersionCacheKey } from "../cache/key";
-import { parseItemFile } from "../domain/item";
+import { parseItemFile, type ItemFile } from "../domain/item";
 import type { ItemRecord } from "../domain/item";
 import type { ToolContext } from "./_ctx";
 
@@ -95,19 +95,18 @@ export const listItemsTool = {
 
     const ck = itemListCacheKey(version, locale);
     const cached = await ctx.cache.get(ck);
+    let file: ItemFile | undefined;
     if (cached !== undefined) {
-      const parsed = cached as ListItemsOutput;
-      return { ...parsed, locale };
+      file = cached as ItemFile;
+    } else {
+      const raw = await ctx.client.getItemList(version, locale);
+      file = parseItemFile(raw);
+      await ctx.cache.set(ck, file);
     }
-
-    const raw = await ctx.client.getItemList(version, locale);
-    const file = parseItemFile(raw);
 
     const items: CompactItem[] = Object.values(file.data).map(toCompact);
 
     const result: ListItemsOutput = { version, locale, count: items.length, items };
-
-    await ctx.cache.set(ck, result);
 
     return result;
   },

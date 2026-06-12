@@ -24,10 +24,6 @@ export function getSummonerSpellsPath(version: string, locale: string): string {
   return `${BASE}/cdn/${version}/data/${locale}/summoner.json`;
 }
 
-export function getProfileIconPath(version: string, locale: string): string {
-  return `${BASE}/cdn/${version}/data/${locale}/profileicon.json`;
-}
-
 export function getVersionsPath(): string {
   return `${BASE}/api/versions.json`;
 }

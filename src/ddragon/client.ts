@@ -5,7 +5,6 @@ import {
   getItemListPath,
   getRuneListPath,
   getSummonerSpellsPath,
-  getProfileIconPath,
   getVersionsPath,
 } from "./endpoints";
 
@@ -114,10 +113,6 @@ export class DDragonClient {
 
   async getSummonerList(version: string, locale: string): Promise<unknown> {
     return this.fetchJson(getSummonerSpellsPath(version, locale));
-  }
-
-  async getProfileIconList(version: string, locale: string): Promise<unknown> {
-    return this.fetchJson(getProfileIconPath(version, locale));
   }
 
   // -------------------------------------------------------------------------

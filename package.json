@@ -1,6 +1,6 @@
 {
   "name": "@naml14/lol-datadragon-mcp",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "MCP server for Riot Data Dragon — pure data layer, no reasoning",
   "type": "module",
   "license": "MIT",

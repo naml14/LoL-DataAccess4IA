@@ -19,8 +19,3 @@ export type {
   SummonerSpellFile,
   SummonerSpellImage,
 } from "./summoner.js";
-export type {
-  ProfileIconRecord,
-  ProfileIconFile,
-  ProfileIconImage,
-} from "./profileicon.js";

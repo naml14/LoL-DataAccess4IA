@@ -5,7 +5,6 @@ import {
   getItemListPath,
   getRuneListPath,
   getSummonerSpellsPath,
-  getProfileIconPath,
   getVersionsPath,
 } from "../../src/ddragon/endpoints";
 
@@ -65,15 +64,6 @@ describe("ddragon endpoints", () => {
       const url = getSummonerSpellsPath("14.10.1", "en_US");
       expect(url).toBe(
         "https://ddragon.leagueoflegends.com/cdn/14.10.1/data/en_US/summoner.json"
-      );
-    });
-  });
-
-  describe("getProfileIconPath", () => {
-    test("returns canonical profile icon URL", () => {
-      const url = getProfileIconPath("14.10.1", "en_US");
-      expect(url).toBe(
-        "https://ddragon.leagueoflegends.com/cdn/14.10.1/data/en_US/profileicon.json"
       );
     });
   });
