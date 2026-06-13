@@ -19,7 +19,7 @@ The system MUST preserve the canonical full champion schema from `champion.json`
 - THEN it MUST successfully match regardless of casing
 
 ### Requirement: Item Record Schema
-The system MUST parse item records preserving their hierarchical and relational data.
+The system MUST parse item records preserving their hierarchical and relational data. Additionally, name-based item lookups MUST preserve the full `ItemRecord` shape (including `maps`, `from`, `into`, `stats`, `description`, plaintext, etc.) without dropping or synthesizing fields.
 
 #### Scenario: Item with recipes
 - GIVEN an item record with component requirements
@@ -30,6 +30,13 @@ The system MUST parse item records preserving their hierarchical and relational 
 - GIVEN a base item (e.g., Long Sword)
 - WHEN the data is parsed
 - THEN the recipe arrays MUST be empty or absent per Riot's schema
+
+#### Scenario: Full schema preservation on name lookup
+
+- GIVEN an item is looked up by name using `get_items_by_name` or `get_item_canonical_for_map`
+- WHEN the response is generated
+- THEN the full `ItemRecord` shape MUST be preserved on the returned objects
+- AND no fields MUST be dropped or synthesized
 
 ### Requirement: Rune and Summoner Spell Schemas
 The system MUST parse Rune Trees (`runesReforged.json`), Summoner Spells, and Profile Icons matching Riot's exact nested structure.
