@@ -1,8 +1,6 @@
 import { resolveVersion } from "../ddragon/versions";
-import { getItemListPath } from "../ddragon/endpoints";
-import { cacheKey } from "../cache/key";
 import { resolvedVersionCacheKey } from "../cache/key";
-import { parseItemFile, type ItemFile } from "../domain/item";
+import { getItemFile } from "../ddragon/item-helpers";
 import type { ItemRecord } from "../domain/item";
 import type { ToolContext } from "./_ctx";
 
@@ -44,10 +42,6 @@ const InputSchema = {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function itemListCacheKey(version: string, locale: string): string {
-  return cacheKey(version, locale, getItemListPath(version, locale).replace(/^https:\/\/ddragon\.leagueoflegends\.com/, ""));
-}
 
 /** Map an ItemRecord to compact form. */
 function toCompact(item: ItemRecord): CompactItem {
@@ -93,16 +87,7 @@ export const listItemsTool = {
       }
     }
 
-    const ck = itemListCacheKey(version, locale);
-    const cached = await ctx.cache.get(ck);
-    let file: ItemFile | undefined;
-    if (cached !== undefined) {
-      file = cached as ItemFile;
-    } else {
-      const raw = await ctx.client.getItemList(version, locale);
-      file = parseItemFile(raw);
-      await ctx.cache.set(ck, file);
-    }
+    const file = await getItemFile(version, locale, ctx.client, ctx.cache);
 
     const items: CompactItem[] = Object.values(file.data).map(toCompact);
 
