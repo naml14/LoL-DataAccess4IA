@@ -5,6 +5,8 @@ import { listChampionsTool } from "../tools/list-champions";
 import { getChampionTool } from "../tools/get-champion";
 import { listItemsTool } from "../tools/list-items";
 import { getItemTool } from "../tools/get-item";
+import { getItemsByNameTool } from "../tools/get-items-by-name";
+import { getItemCanonicalForMapTool } from "../tools/get-item-canonical-for-map";
 import { listRunesTool } from "../tools/list-runes";
 import { listSummonerSpellsTool } from "../tools/list-summoner-spells";
 import type { ToolContext } from "../tools/_ctx";
@@ -64,6 +66,8 @@ export class ToolRegistry {
     this.register(getChampionTool);
     this.register(listItemsTool);
     this.register(getItemTool);
+    this.register(getItemsByNameTool);
+    this.register(getItemCanonicalForMapTool);
     this.register(listRunesTool);
     this.register(listSummonerSpellsTool);
   }

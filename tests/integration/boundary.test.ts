@@ -4,6 +4,8 @@ import { listChampionsTool } from "../../src/tools/list-champions";
 import { getChampionTool } from "../../src/tools/get-champion";
 import { listItemsTool } from "../../src/tools/list-items";
 import { getItemTool } from "../../src/tools/get-item";
+import { getItemsByNameTool } from "../../src/tools/get-items-by-name";
+import { getItemCanonicalForMapTool } from "../../src/tools/get-item-canonical-for-map";
 import { listRunesTool } from "../../src/tools/list-runes";
 import { listSummonerSpellsTool } from "../../src/tools/list-summoner-spells";
 import { createToolContext } from "../../src/tools/_ctx";
@@ -20,6 +22,8 @@ const ALL_TOOLS = [
   getChampionTool,
   listItemsTool,
   getItemTool,
+  getItemsByNameTool,
+  getItemCanonicalForMapTool,
   listRunesTool,
   listSummonerSpellsTool,
 ];
@@ -34,6 +38,8 @@ const TOOL_SOURCE_FILES: Record<string, string> = {
   get_champion: "src/tools/get-champion.ts",
   list_items: "src/tools/list-items.ts",
   get_item: "src/tools/get-item.ts",
+  get_items_by_name: "src/tools/get-items-by-name.ts",
+  get_item_canonical_for_map: "src/tools/get-item-canonical-for-map.ts",
   list_runes: "src/tools/list-runes.ts",
   list_summoner_spells: "src/tools/list-summoner-spells.ts",
 };
@@ -228,6 +234,44 @@ test("boundary: list_summoner_spells response contains no reasoning language", a
   const result = await listSummonerSpellsTool.handler({}, ctx);
   const serialized = JSON.stringify(result);
   expect(() => assertNoForbiddenLanguage(serialized, "list_summoner_spells response")).not.toThrow();
+});
+
+test("boundary: get_items_by_name response contains no reasoning language", async () => {
+  const itemsFile = {
+    type: "item",
+    version: "14.10.1",
+    data: {
+      "1001": {
+        id: 1001, name: "Boots of Speed", plaintext: "Slightly increases Movement Speed",
+        gold: { total: 300, sell: 210, base: 300 },
+        tags: {}, image: { full: "item.png" },
+        maps: { "11": true },
+      },
+    },
+  };
+  const ctx = buildMockContext({ version: "14.10.1", items: itemsFile });
+  const result = await getItemsByNameTool.handler({ name: "Boots of Speed" }, ctx);
+  const serialized = JSON.stringify(result);
+  expect(() => assertNoForbiddenLanguage(serialized, "get_items_by_name response")).not.toThrow();
+});
+
+test("boundary: get_item_canonical_for_map response contains no reasoning language", async () => {
+  const itemsFile = {
+    type: "item",
+    version: "14.10.1",
+    data: {
+      "1001": {
+        id: 1001, name: "Boots of Speed", plaintext: "Slightly increases Movement Speed",
+        gold: { total: 300, sell: 210, base: 300 },
+        tags: {}, image: { full: "item.png" },
+        maps: { "11": true },
+      },
+    },
+  };
+  const ctx = buildMockContext({ version: "14.10.1", items: itemsFile });
+  const result = await getItemCanonicalForMapTool.handler({ name: "Boots of Speed", mapId: "11" }, ctx);
+  const serialized = JSON.stringify(result);
+  expect(() => assertNoForbiddenLanguage(serialized, "get_item_canonical_for_map response")).not.toThrow();
 });
 
 // ---------------------------------------------------------------------------

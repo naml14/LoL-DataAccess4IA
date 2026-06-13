@@ -6,7 +6,7 @@ An LLM that needs raw LoL game data (champions, items, runes, summoner spells, c
 
 ## Status
 
-**v1.0 release** — Phase 7 complete. The MCP server exposes 8 tools over stdio transport.
+**v0.2.0 release** — 9 tools. The MCP server exposes 9 tools over stdio transport.
 
 ### Warning Status
 
@@ -57,9 +57,10 @@ All configuration is via environment variables. Defaults are safe for local deve
 | `get_champion` | Returns a single champion record by id or numeric key | `idOrKey` (string) |
 | `get_item` | Returns a single item record by numeric id | `id` (number) |
 | `list_items` | Returns all items for a patch version | `version?`, `locale?` |
+| `get_items_by_name` | Returns all items matching a name (case-insensitive exact match) | `name` (string) |
+| `get_item_canonical_for_map` | Returns items matching name+mapId (supports 7 map aliases) | `name` (string), `mapId` (string) |
 | `list_runes` | Returns all rune trees for a patch version | `version?`, `locale?` |
 | `list_summoner_spells` | Returns all summoner spells for a patch version | `version?`, `locale?` |
-| `list_profile_icons` | Returns all profile icons for a patch version | `version?`, `locale?` |
 
 ## Non-Reasoning Boundary (LOUD)
 
@@ -120,7 +121,7 @@ src/
   ddragon/           # HTTP client, version resolver, endpoint builders
   cache/             # Memory + disk tiered cache
   domain/            # Zod schemas (Champion, Item, Rune, Summoner, ProfileIcon)
-  tools/             # 8 MCP tool handlers
+  tools/             # 9 MCP tool handlers
   mcp/               # Server, tool registry, error mapping
 tests/
   unit/              # Unit tests per module

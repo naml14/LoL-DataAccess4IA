@@ -87,9 +87,9 @@ describe("mcp-server: error envelope mapping", () => {
 // ---------------------------------------------------------------------------
 
 describe("mcp-server: tool registry", () => {
-  test("registry exposes all 7 tools", () => {
+  test("registry exposes all 9 tools", () => {
     const registry = new ToolRegistry();
-    expect(registry.listTools()).toHaveLength(7);
+    expect(registry.listTools()).toHaveLength(9);
   });
 
   test("each tool has name, description, and inputSchema", () => {
@@ -111,6 +111,8 @@ describe("mcp-server: tool registry", () => {
       "get_champion",
       "get_current_patch",
       "get_item",
+      "get_items_by_name",
+      "get_item_canonical_for_map",
       "list_champions",
       "list_items",
       "list_runes",

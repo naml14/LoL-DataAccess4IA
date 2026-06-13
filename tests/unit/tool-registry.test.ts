@@ -5,6 +5,8 @@ import { listChampionsTool } from "../../src/tools/list-champions";
 import { getChampionTool } from "../../src/tools/get-champion";
 import { listItemsTool } from "../../src/tools/list-items";
 import { getItemTool } from "../../src/tools/get-item";
+import { getItemsByNameTool } from "../../src/tools/get-items-by-name";
+import { getItemCanonicalForMapTool } from "../../src/tools/get-item-canonical-for-map";
 import { listRunesTool } from "../../src/tools/list-runes";
 import { listSummonerSpellsTool } from "../../src/tools/list-summoner-spells";
 
@@ -20,6 +22,8 @@ const ALL_TOOLS = [
   getChampionTool,
   listItemsTool,
   getItemTool,
+  getItemsByNameTool,
+  getItemCanonicalForMapTool,
   listRunesTool,
   listSummonerSpellsTool,
 ];
@@ -30,6 +34,8 @@ const EXPECTED_NAMES = [
   "get_champion",
   "list_items",
   "get_item",
+  "get_items_by_name",
+  "get_item_canonical_for_map",
   "list_runes",
   "list_summoner_spells",
 ];
@@ -38,10 +44,10 @@ const EXPECTED_NAMES = [
 // Tests
 // ---------------------------------------------------------------------------
 
-test("ToolRegistry: lists all 7 tools", () => {
+test("ToolRegistry: lists all 9 tools", () => {
   const registry = new ToolRegistry();
   const tools = registry.listTools();
-  expect(tools).toHaveLength(7);
+  expect(tools).toHaveLength(9);
 });
 
 test("ToolRegistry: tools have correct names", () => {
@@ -96,6 +102,8 @@ test("ToolRegistry: tool descriptions scanned from source files contain no reaso
     get_champion: "src/tools/get-champion.ts",
     list_items: "src/tools/list-items.ts",
     get_item: "src/tools/get-item.ts",
+    get_items_by_name: "src/tools/get-items-by-name.ts",
+    get_item_canonical_for_map: "src/tools/get-item-canonical-for-map.ts",
     list_runes: "src/tools/list-runes.ts",
     list_summoner_spells: "src/tools/list-summoner-spells.ts",
   };
